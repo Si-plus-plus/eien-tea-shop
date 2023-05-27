@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -44,12 +46,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'final_project.urls'
+ROOT_URLCONF = 'tea_shop.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templated")],
+        'DIRS': [os.path.join(BASE_DIR, "supports/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,7 +64,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'final_project.wsgi.application'
+WSGI_APPLICATION = 'tea_shop.wsgi.application'
 
 
 # Database
@@ -110,11 +112,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+STATIC_URL = 'supports/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "supports/static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "supports/static_root")
+MEDIA_URL = 'supports/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "supports/media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

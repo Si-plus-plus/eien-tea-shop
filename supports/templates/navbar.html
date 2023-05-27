@@ -1,0 +1,29 @@
+<hr>
+<nav class="max-w-screen-sm mx-auto py-4">
+    <ul class="flex flex-wrap items-center justify-between">
+        <li>
+            <a href="/">
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="/">
+                Shop
+            </a>
+        </li>
+        <li>
+            <a href="/">
+                Blog
+            </a>
+        </li>
+        <li>
+            <a href="/">
+                Contact
+            </a>
+        </li>
+        {% if request.user.is_staff %}
+            <li><a href="/">Staff</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<hr>
