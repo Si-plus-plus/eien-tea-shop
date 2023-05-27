@@ -8,7 +8,7 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomeView.as_view(), name='home'),
-    path('cart/', include('cart.urls', namespace='cart')),
+    path('store/', include('store.urls', namespace='store')),
 ]
 
 if settings.DEBUG:
