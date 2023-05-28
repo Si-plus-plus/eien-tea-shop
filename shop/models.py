@@ -75,18 +75,18 @@ class Item(models.Model):
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(Item, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     paid_at = models.DateTimeField(null=True, blank=True)
-    shipping_address = models.ForeignKey(Address, on_delete=DO_NOTHING)
+    shipping_address = models.ForeignKey(Address, null=True, blank=True, on_delete=DO_NOTHING)
 
     def __str__(self):
-        return f"O-{self.pk}"
+        return self.pk
 
 
 class Cart(models.Model):
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    transaction = models.ForeignKey(Transaction, related_name='cart', null=True, blank=True, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, null=True, blank=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     buy_price = models.PositiveIntegerField(null=True, blank=True)
 
@@ -107,7 +107,4 @@ class Payment(models.Model):
     raw_response = models.TextField()
 
     def __str__(self):
-        return f"O-{self.transaction}/P-{self.pk}"
-
-
-
+        return f"Order: {self.transaction}/ Payment:-{self.pk}"
