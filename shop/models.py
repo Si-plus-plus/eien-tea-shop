@@ -55,7 +55,7 @@ class Item(models.Model):
     category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     type = models.ForeignKey(Type, null=True, on_delete=models.SET_NULL)
 
-    description = models.CharField(max_length=1000)
+    description = models.TextField(max_length=10000)
     stock = models.PositiveIntegerField()
     sold_count = models.PositiveIntegerField(default=0)
 
