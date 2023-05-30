@@ -45,7 +45,7 @@ class Address(models.Model):
 
 class Variation(models.Model):
     name = models.CharField(max_length=20)
-    stock = models.PositiveIntegerField()
+    stock = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -56,14 +56,14 @@ class Item(models.Model):
     active = models.BooleanField(default=True)
 
     slug = models.SlugField(unique=True, blank=True)
-    price = models.PositiveIntegerField()
-    discounted_price = models.PositiveIntegerField(null=True, blank=True)
+    price = models.IntegerField()
+    discounted_price = models.IntegerField(null=True, blank=True)
 
     category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     type = models.ForeignKey(Type, null=True, on_delete=models.SET_NULL)
     variation = models.ManyToManyField(Variation)
     description = models.TextField(max_length=10000)
-    sold_count = models.PositiveIntegerField(default=0)
+    sold_count = models.IntegerField(default=0)
 
     image = models.ImageField(upload_to='item_images', default='none/none.jpg', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -93,8 +93,8 @@ class Transaction(models.Model):
 class Cart(models.Model):
     transaction = models.ForeignKey(Transaction, related_name='cart', null=True, blank=True, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, null=True, blank=True, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    buy_price = models.PositiveIntegerField(null=True, blank=True)
+    quantity = models.IntegerField(default=1)
+    buy_price = models.IntegerField(null=True, blank=True)
     variation = models.ForeignKey(Variation, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -110,7 +110,7 @@ class Payment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     success = models.BooleanField(default=False)
 
-    amount_paid = models.PositiveIntegerField()
+    amount_paid = models.IntegerField()
     raw_response = models.TextField()
 
     def __str__(self):
