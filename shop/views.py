@@ -1,6 +1,6 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
-from .models import Item
+from .models import Item, Cart
 from .utils import get_or_set_session
 from .forms import AddToCartForm
 
@@ -64,3 +64,28 @@ class CartView(generic.TemplateView):
         context['transaction'] = get_or_set_session(self.request)
         return context
 
+
+class AddQuantityView(generic.View):
+    def get(self, request, *args, **kwargs):
+        cart_item = get_object_or_404(Cart, id=kwargs['pk'])
+        cart_item.quantity += 1
+        cart_item.save()
+        return redirect('shop:cart')
+
+
+class SubtractQuantityView(generic.View):
+    def get(self, request, *args, **kwargs):
+        cart_item = get_object_or_404(Cart, id=kwargs['pk'])
+        if cart_item.quantity <= 1:
+            cart_item.delete()
+        else:
+            cart_item.quantity -= 1
+            cart_item.save()
+        return redirect('shop:cart')
+
+
+class RemoveFromCartView(generic.View):
+    def get(self, request, *args, **kwargs):
+        cart_item = get_object_or_404(Cart, id=kwargs['pk'])
+        cart_item.delete()
+        return redirect('shop:cart')

@@ -48,13 +48,14 @@
                             </td>
                             <td>
                                 <div class="text-center flex flex-wrap ">
-                                    <button href="#" class="w-1/4 border border-gray-400 rounded-l-lg hover:bg-green-500 hover:border-0">
+                                    <a href="{% url 'shop:subtract-quantity' item.id %}" class="w-1/4 border border-gray-400 rounded-l-lg hover:bg-green-500 hover:border-0">
                                         <i class="fa-solid fa-minus"></i>
-                                    </button>
-                                    <input type="text" class="w-1/2 px-1" value="{{ item.quantity }}">
-                                    <button href="#" class="w-1/4 bg-gray-100 border border-gray-400 rounded-r-lg">
+                                    </a>
+<!--                                    TODO Implement input submission-->
+                                    <span class="w-1/2 px-1">{{ item.quantity }}</span>
+                                    <a href="{% url 'shop:add-quantity' item.id %}" class="w-1/4 bg-gray-100 border border-gray-400 rounded-r-lg">
                                         <i class="fa-solid fa-plus"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </td>
                             <td class="items-end text-right px-4">
@@ -66,11 +67,17 @@
                                 {% endif %}
                             </td>
                             <td class="text-end">
-                                <a href="" class="text-gray-400 hover:text-red-500">
+                                <a href="{% url 'shop:remove-from-cart' item.id %}" class="text-gray-400 hover:text-red-500">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </td>
                         </tr>
+                    {% empty %}
+                    <tr>
+                        <td>
+                            Your cart is empty
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
