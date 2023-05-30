@@ -116,14 +116,17 @@ class Transaction(models.Model):
 
     def get_total_price(self):
         total = 0
-        for cart_items in self.items.all():
+        for cart_items in self.cart.all():
             total += cart_items.get_total_item_price()
         return total
 
     def get_total_discounted_price(self):
         total = 0
-        for cart_items in self.items.all():
-            total += cart_items.get_total_item_discounted_price()
+        for cart_items in self.cart.all():
+            if cart_items.item.is_discounted():
+                total += cart_items.get_total_item_discounted_price()
+            else:
+                total += cart_items.get_total_item_price()
         return total
 
     def get_total_discount_value(self):
@@ -141,10 +144,10 @@ class Cart(models.Model):
         return f"{self.item.name} - {self.quantity} pc(s)"
 
     def get_total_item_price(self):
-        return self.quantity * self.product.price
+        return self.quantity * self.item.price
 
     def get_total_item_discounted_price(self):
-        return self.quantity * self.product.discounted_price
+        return self.quantity * self.item.discounted_price
 
 
 class Payment(models.Model):

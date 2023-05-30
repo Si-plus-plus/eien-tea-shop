@@ -4,10 +4,15 @@ from .models import Item, Cart
 from .utils import get_or_set_session
 from .forms import AddToCartForm
 
+from itertools import chain
+
 
 class CatalogueView(generic.ListView):
     template_name = 'shop/catalogue.html'
-    queryset = Item.objects.all()
+
+    #TODO return items in stock, then items not in stock
+
+    queryset = Item.objects.filter(active=True).order_by('-stock')
 
     context = {
         'item_list': queryset,

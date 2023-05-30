@@ -8,26 +8,24 @@
         <div class="text-3xl font-bold ">
             Cart
         </div>
-        <a href="{% url 'shop:catalogue' %}" class="px-4 py-2 border text-green-700 border-green-700 hover:bg-green-700 hover:text-white rounded-lg">
+        <a href="{% url 'shop:catalogue' %}" class="px-4 py-2 border text-green-600 border-green-600 hover:bg-green-600 hover:text-white rounded-lg">
             continue shopping
         </a>
     </div>
     <div class="flex flex-wrap my-6">
-        <div class="w-3/4 pt-4 pr-8 p-2 bg-white p-8 rounded-lg">
+        <div class="w-2/3 pt-4 pr-4 p-2 bg-white p-8 rounded-lg h-fit">
             <table class="table-auto w-full">
                 <thead>
                     {% if transaction.cart.count > 0 %}
                         <tr>
-                            <th class="w-1/2">
+                            <th class="w-7/12">
                                 Name
                             </th>
-                            <th class="w-1/6">
+                            <th class="w-2/12">
                                 Qty
                             </th>
-                            <th class="w-1/4">
+                            <th class="w-3/12">
                                 Price
-                            </th>
-                            <th class="w-1/12">
                             </th>
                         </tr>
                     {% endif %}
@@ -69,23 +67,27 @@
                                     </a>
                                 </div>
                             </td>
-                            <td class="items-end text-right px-4">
-                                 {% if item.item.is_discounted %}
-                                    <div class="line-through text-gray-400 text-base text-sm">Rp{{ item.item.price }}</div>
-                                    <span class="font-semibold">Rp{{ item.item.discounted_price }}</span>
-                                {% else %}
-                                    <span class="font-semibold">Rp{{ item.item.price }}</span>
-                                {% endif %}
-                            </td>
-                            <td class="text-end">
-                                <a href="{% url 'shop:remove-from-cart' item.id %}" class="text-gray-400 hover:text-red-500">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </a>
+                            <td class="items-end">
+                                <div class="flex">
+                                    <div class="w-3/4 text-right">
+                                         {% if item.item.is_discounted %}
+                                            <div class="line-through text-gray-400 text-base text-sm">Rp{{ item.item.price }}</div>
+                                            <div class="font-semibold">Rp{{ item.item.discounted_price }}</div>
+                                        {% else %}
+                                            <div class="font-semibold">Rp{{ item.item.price }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="w-1/4 pl-4 items-end ite">
+                                        <a href="{% url 'shop:remove-from-cart' item.id %}" class="text-gray-400 hover:text-red-500">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </a>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     {% empty %}
                     <tr>
-                        <td class="text-center">
+                        <td class="text-center text-gray-400">
                             Your cart is empty
                         </td>
                     </tr>
@@ -93,18 +95,43 @@
                 </tbody>
             </table>
         </div>
-        <div class="w-1/4 flex flex-wrap justify-between pl-4">
-            <div class="bg-white p-8 rounded-lg w-full">
+        <div class="w-1/3 flex flex-wrap justify-between pl-4">
+            <div class="bg-white p-8 rounded-lg w-full h-fit">
                 <div class="text-xl font-semibold">
                     Summary
                 </div>
+                <div class="flex flex-wrap justify-between mt-4">
+                    <span>Subtotal</span>
+                    <span>Rp{{ transaction.get_total_price }}</span>
+                </div>
+                 <div class="flex flex-wrap justify-between">
+                    <span>Discounts</span>
+                     {% if transaction.get_total_discount_value > 0 %}
+                        <span class="text-green-600">
+                            -Rp{{ transaction.get_total_discount_value }}
+                     {% else %}
+                        <span class="">
+                            -
+                     {% endif %}
+                    </span>
+                </div>
+                <div class="flex flex-wrap justify-between">
+                    <span>Shipping Fee</span>
+                    <span>Rp0</span>
+                </div>
+                <hr class="my-2">
+                <div class="flex flex-wrap justify-between mb-8">
+                    <span>Total</span>
+                    <span class="font-semibold">Rp{{ transaction.get_total_discounted_price }}</span>
+                </div>
+
                 {% if transaction.cart.count > 0 %}
-                    <a href="#" class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center">
+                    <button href="" class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
                 {% else %}
-                    <a class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center">
+                    <button class="block w-full px-4 py-2 bg-gray-300 text-white font-semibold rounded-lg">
                 {% endif %}
                     Checkout
-                </a>
+                </button>
             </div>
         </div>
     </div>
