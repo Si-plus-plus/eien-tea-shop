@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.deletion import DO_NOTHING
 from django.utils.text import slugify
 from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
@@ -44,6 +43,14 @@ class Address(models.Model):
         return address_string
 
 
+class Variation(models.Model):
+    name = models.CharField(max_length=20)
+    stock = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.name
+
+
 class Item(models.Model):
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=True)
@@ -54,12 +61,11 @@ class Item(models.Model):
 
     category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     type = models.ForeignKey(Type, null=True, on_delete=models.SET_NULL)
-
+    variation = models.ManyToManyField(Variation)
     description = models.TextField(max_length=10000)
-    stock = models.PositiveIntegerField()
     sold_count = models.PositiveIntegerField(default=0)
 
-    image = models.ImageField(upload_to='product_images', default='none/none.jpg', null=True, blank=True)
+    image = models.ImageField(upload_to='item_images', default='none/none.jpg', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -78,10 +84,10 @@ class Transaction(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     paid_at = models.DateTimeField(null=True, blank=True)
-    shipping_address = models.ForeignKey(Address, null=True, blank=True, on_delete=DO_NOTHING)
+    shipping_address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class Cart(models.Model):
@@ -89,6 +95,7 @@ class Cart(models.Model):
     item = models.ForeignKey(Item, null=True, blank=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     buy_price = models.PositiveIntegerField(null=True, blank=True)
+    variation = models.ForeignKey(Variation, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.item.name} - {self.quantity} pc(s)"
