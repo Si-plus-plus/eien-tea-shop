@@ -79,6 +79,8 @@ class Item(models.Model):
     def get_absolute_url(self):
         return reverse("shop:item-detail", kwargs={'slug': self.slug})
 
+    #TODO implement functions to get formatted price/discounted price
+
     def is_discounted(self):
         if not self.discounted_price:
             return False
@@ -87,8 +89,14 @@ class Item(models.Model):
         return True
 
     def get_discount_value(self):
-        if self.discounted_price:
-            return self.price - self.discounted_price
+        if not self.is_discounted():
+            return 0
+        return self.price - self.discounted_price
+
+    def get_discount_percentage(self) -> str:
+        if not self.is_discounted():
+            return "0%"
+        return f"-{round(self.get_discount_value()/self.price * 100)}%"
 
 
 class Transaction(models.Model):

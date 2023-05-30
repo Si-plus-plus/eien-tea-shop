@@ -7,15 +7,8 @@
 <div class="max-w-screen-lg mx-auto">
     TODO Breadcrumbs
     <div class="flex flex-wrap">
-        <div class="relative m-4 h-96">
+        <div class="m-4 h-96">
             <img class="w-96 h-96 rounded-lg object-cover border border-gray-100" src="{{ item.image.url }}">
-            {% if item.is_discounted %}
-                <div class="absolute top-4 right-2">
-                    <span class="inline-block bg-red-400 text-white rounded-full px-3 text-md font-bold mr-2">
-                        SALE
-                    </span>
-                </div>
-            {% endif %}
 
             {% if item.stock == 0 %}
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -36,6 +29,9 @@
                 {% if item.is_discounted %}
                     <span>Rp{{ item.discounted_price }}</span>
                     <span class="line-through text-gray-300 text-base font-normal">Rp{{ item.price }}</span>
+                    <span class="inline-block bg-red-400 text-white rounded-full px-3 text-sm font-bold mr-2">
+                        {{ item.get_discount_percentage }}
+                    </span>
                 {% else %}
                     <span>Rp{{ item.price }}</span>
                 {% endif %}
