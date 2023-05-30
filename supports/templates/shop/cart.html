@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="max-w-screen-lg mx-auto">
+    <div class="text-3xl font-bold pt-8 pl-8 mb-4 bg-white p-8 rounded-lg">
+        Cart
+    </div>
+    <div class="flex flex-wrap my-6">
+        <div class="w-3/4 pt-4 pr-8 p-2 bg-white p-8 rounded-lg">
+            <table class="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th class="w-1/2">
+                            Name
+                        </th>
+                        <th class="w-1/6">
+                            Qty
+                        </th>
+                        <th class="w-1/4">
+                            Price
+                        </th>
+                        <th class="w-1/12">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in transaction.cart.all %}
+                        <tr>
+                            <td class="flex flex-wrap h-30 my-2">
+                                <div class="w-1/4">
+                                    <img src="{{ item.item.image.url }}" class="h-24 object-cover rounded-lg overflow-hidden bg-white border border-gray-200">
+                                </div>
+                                <div class="w-3/4 h-28 pt-4 px-4 inline-block items-middle align-middle">
+                                    <div class="text-lg font-semibold truncate">
+                                        {{ item.item.name }}
+                                        {% if item.item.discounted_price and item.item.discounted_price < item.item.price %}
+                                            <span class="inline-block bg-red-400 text-white rounded-full px-2 text-sm font-bold mr-2">
+                                                SALE
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-sm">
+                                        {{ item.variation.name }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center flex flex-wrap ">
+                                    <button href="#" class="w-1/4 border border-gray-400 rounded-l-lg hover:bg-green-500 hover:border-0">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <input type="text" class="w-1/2 px-1" value="{{ item.quantity }}">
+                                    <button href="#" class="w-1/4 bg-gray-100 border border-gray-400 rounded-r-lg">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="items-end text-right px-4">
+                                 {% if item.item.discounted_price and item.item.discounted_price < item.item.price %}
+                                    <div class="line-through text-gray-400 text-base text-sm">Rp{{ item.item.price }}</div>
+                                    <span class="font-semibold">Rp{{ item.item.discounted_price }}</span>
+                                {% else %}
+                                    <span class="font-semibold">Rp{{ item.item.price }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <a href="" class="text-gray-400 hover:text-red-500">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="w-1/4 flex flex-wrap justify-between pl-4">
+            <div class="bg-white p-8 rounded-lg">
+                TODO  checkout functions
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
