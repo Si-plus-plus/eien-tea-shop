@@ -74,6 +74,8 @@ CRISPY_TEMPLATE_PACK = "tailwind"
 
 WSGI_APPLICATION = 'tea_shop.wsgi.application'
 
+USE_THOUSAND_SEPARATOR = True
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
