@@ -9,7 +9,7 @@
     <div class="flex flex-wrap">
         <div class="relative m-4 h-96">
             <img class="w-96 h-96 rounded-lg object-cover border border-gray-100" src="{{ item.image.url }}">
-            {% if item.discounted_price and item.discounted_price < item.price %}
+            {% if item.is_discounted %}
                 <div class="absolute top-4 right-2">
                     <span class="inline-block bg-red-400 text-white rounded-full px-3 text-md font-bold mr-2">
                         SALE
@@ -33,7 +33,7 @@
                 <span class="text-sm">Items Sold : {{ item.sold_count }}</span>
             </div>
             <div class="text-2xl font-semibold mb-6">
-                {% if item.discounted_price and item.discounted_price < item.price %}
+                {% if item.is_discounted %}
                     <span>Rp{{ item.discounted_price }}</span>
                     <span class="line-through text-gray-300 text-base font-normal">Rp{{ item.price }}</span>
                 {% else %}

@@ -79,6 +79,17 @@ class Item(models.Model):
     def get_absolute_url(self):
         return reverse("shop:item-detail", kwargs={'slug': self.slug})
 
+    def is_discounted(self):
+        if not self.discounted_price:
+            return False
+        if self.price <= self.discounted_price:
+            return False
+        return True
+
+    def get_discount_value(self):
+        if self.discounted_price:
+            return self.price - self.discounted_price
+
 
 class Transaction(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
@@ -99,6 +110,10 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{self.item.name} - {self.quantity} pc(s)"
+
+    def get_total_item_price(self):
+        return self.quantity * self.product.price
+
 
 
 class Payment(models.Model):

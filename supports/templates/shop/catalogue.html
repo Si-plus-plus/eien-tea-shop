@@ -28,7 +28,7 @@
                 <div class="relative">
                     <img class="w-full h-48 object-cover" src="{{ item.image.url }}">
 
-                    {% if item.discounted_price and item.discounted_price < item.price %}
+                    {% if item.is_discounted %}
                         <div class="absolute top-1 right-1">
                             <span class="inline-block bg-red-400 text-white rounded-full px-3 text-sm font-bold mr-2">
                                 SALE
@@ -50,7 +50,7 @@
                         {{ item.name }}
                     </div>
                     <div class="font-semibold truncate">
-                        {% if item.discounted_price and item.discounted_price < item.price %}
+                        {% if item.is_discounted %}
                             <span>Rp{{ item.discounted_price }}</span>
                             <span class="line-through text-gray-300 font-normal">Rp{{ item.price }}</span>
                         {% else %}
