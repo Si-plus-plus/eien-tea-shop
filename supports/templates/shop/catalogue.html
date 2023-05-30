@@ -31,7 +31,7 @@
                     {% if item.is_discounted %}
                         <div class="absolute top-1 right-1">
                             <span class="inline-block bg-red-400 text-white rounded-full px-3 text-sm font-bold mr-2">
-                                -{{ item.get_discount_percentage }}
+                                {{ item.get_discount_percentage }}
                             </span>
                         </div>
                     {% endif %}
