@@ -19,12 +19,12 @@
 <div class="max-w-screen-lg mx-auto flex flex-wrap my-6">
     <div class="w-1/4 pt-4 pr-4">
         <div class="bg-white p-8 rounded-lg">
-            TODO  checkout functions
+            TODO  filter functions
         </div>
     </div>
     <div class="w-3/4 flex flex-wrap justify-between content-start">
         {% for item in item_list %}
-            <a href="{{ item.get_absolute_url }}" class="h-fit w-60 rounded-lg overflow-hidden bg-white border border-gray-200 my-4 mx-2 hover:scale-105 ease-in duration-100">
+            <a href="{{ item.get_absolute_url }}" class="h-fit w-60 rounded-lg overflow-hidden bg-white border border-gray-200 my-4 mx-2 hover:scale-105 ease-in duration-100 text-black hover:text-green-700">
                 <div class="relative">
                     <img class="w-full h-48 object-cover" src="{{ item.image.url }}">
 
@@ -46,10 +46,10 @@
 
                 </div>
                 <div class="px-6 pt-3 pb-2">
-                    <div class="font-bold text-xl truncate">
+                    <div class="font-bold text-xl truncate text-inherit">
                         {{ item.name }}
                     </div>
-                    <div class="font-semibold truncate">
+                    <div class="font-semibold truncate text-black">
                         {% if item.is_discounted %}
                             <span>Rp{{ item.discounted_price }}</span>
                             <span class="line-through text-gray-300 font-normal">Rp{{ item.price }}</span>
