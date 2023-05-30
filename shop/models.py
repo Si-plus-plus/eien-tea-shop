@@ -3,6 +3,8 @@ from django.utils.text import slugify
 from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
 
+from math import ceil
+
 User = get_user_model()
 
 
@@ -63,6 +65,8 @@ class Item(models.Model):
     type = models.ForeignKey(Type, null=True, on_delete=models.SET_NULL)
     variation = models.ManyToManyField(Variation)
     description = models.TextField(max_length=10000)
+
+    stock = models.IntegerField(default=0)
     sold_count = models.IntegerField(default=0)
 
     image = models.ImageField(upload_to='item_images', default='none/none.jpg', null=True, blank=True)
@@ -79,6 +83,12 @@ class Item(models.Model):
     def get_absolute_url(self):
         return reverse("shop:item-detail", kwargs={'slug': self.slug})
 
+    def in_stock(self):
+        return self.stock > 0
+
+    def is_active(self):
+        return self.active
+
     #TODO implement functions to get formatted price/discounted price
 
     def is_discounted(self):
@@ -89,14 +99,10 @@ class Item(models.Model):
         return True
 
     def get_discount_value(self):
-        if not self.is_discounted():
-            return 0
         return self.price - self.discounted_price
 
     def get_discount_percentage(self) -> str:
-        if not self.is_discounted():
-            return "0%"
-        return f"-{round(self.get_discount_value()/self.price * 100)}%"
+        return f"-{ceil(self.get_discount_value()/self.price * 100)}%"
 
 
 class Transaction(models.Model):
@@ -107,6 +113,21 @@ class Transaction(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+    def get_total_price(self):
+        total = 0
+        for cart_items in self.items.all():
+            total += cart_items.get_total_item_price()
+        return total
+
+    def get_total_discounted_price(self):
+        total = 0
+        for cart_items in self.items.all():
+            total += cart_items.get_total_item_discounted_price()
+        return total
+
+    def get_total_discount_value(self):
+        return self.get_total_price() - self.get_total_discounted_price()
 
 
 class Cart(models.Model):
@@ -122,6 +143,8 @@ class Cart(models.Model):
     def get_total_item_price(self):
         return self.quantity * self.product.price
 
+    def get_total_item_discounted_price(self):
+        return self.quantity * self.product.discounted_price
 
 
 class Payment(models.Model):

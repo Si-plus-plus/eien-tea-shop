@@ -43,8 +43,8 @@
                                     <div class="text-lg font-semibold truncate">
                                         {{ item.item.name }}
                                         {% if item.item.is_discounted %}
-                                            <span class="inline-block bg-red-400 text-white rounded-full px-2 text-sm font-bold mr-2">
-                                                SALE
+                                            <span class="bg-red-400 text-white rounded-full px-2 text-sm font-bold mr-2">
+                                                {{ item.item.get_discount_percentage }}
                                             </span>
                                         {% endif %}
                                     </div>
@@ -100,9 +100,11 @@
                 </div>
                 {% if transaction.cart.count > 0 %}
                     <a href="#" class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center">
-                        Checkout
-                    </a>
+                {% else %}
+                    <a class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center">
                 {% endif %}
+                    Checkout
+                </a>
             </div>
         </div>
     </div>
