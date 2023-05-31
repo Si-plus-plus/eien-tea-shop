@@ -21,7 +21,7 @@
                 <li lass="flex-none">
                     <a href="{% url 'shop:cart' %}" class="hover:text-green-600 relative flex">
                         <i class="fas fa-shopping-cart mt-2 mr-2"></i>
-                        <div class="absolute right-0 top-0 rounded-full bg-red-600 w-4 h-4 text-white text-xs leading-tight text-center">
+                        <div class="absolute right-0 top-0 rounded-full bg-red-400 w-4 h-4 text-white font-bold text-xs leading-tight text-center">
                             {{ request | cart_item_count }}
                         </div>
                     </a>
