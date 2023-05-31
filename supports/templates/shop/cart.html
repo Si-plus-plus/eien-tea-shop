@@ -34,18 +34,30 @@
                     {% for item in transaction.cart.all %}
                         <tr>
                             <td>
-                                <a href="{{ item.get_absolute_url }}" class="flex flex-wrap h-30 my-2">
+<!--                                TODO add eye icon on hover-->
+                                <a href="{{ item.item.get_absolute_url }}" class="flex flex-wrap h-30 my-2">
                                     <div class="w-1/4 relative">
                                         <img src="{{ item.item.image.url }}" class="h-24 object-cover rounded-lg overflow-hidden bg-white border border-gray-200">
                                     </div>
-                                    <div class="w-3/4 h-28 pt-4 px-4 inline-block items-middle align-middle">
-                                        <div class="text-lg font-semibold truncate">
-                                            {{ item.item.name }}
+                                    <div class="w-3/4 h-28 px-4 inline-block items-middle align-middle">
+                                        <div class="text-lg font-semibold ">
+                                            {% if item.item.is_newly_added %}
+                                                <span class="bg-blue-400 text-white rounded-full px-2 text-sm font-bold mr-2">
+                                                    NEW
+                                                </span>
+                                            {% endif %}
                                             {% if item.item.is_discounted %}
                                                 <span class="bg-red-400 text-white rounded-full px-2 text-sm font-bold mr-2">
                                                     {{ item.item.get_discount_percentage }}
                                                 </span>
                                             {% endif %}
+                                            {% if item.item.is_discounted or item.item.is_newly_added %}
+                                                <div class="max-w-xs truncate">
+                                            {% else %}
+                                                <div class="max-w-xs truncate mt-6">
+                                            {% endif %}
+                                                {{ item.item.name }}
+                                            </div>
                                         </div>
                                         <div class="text-sm">
                                             {{ item.variation.name }}
@@ -126,14 +138,13 @@
                     <span>Total</span>
                     <span class="font-semibold">Rp{{ transaction.get_total_discounted_price }}</span>
                 </div>
-
                 {% if transaction.cart.count > 0 %}
-                    <button href="" class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
+                    <a href="{% url 'shop:cart-checkout' %}" class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
                 {% else %}
-                    <button class="block w-full px-4 py-2 bg-gray-300 text-white font-semibold rounded-lg">
+                    <a class="block w-full px-4 py-2 bg-gray-300 text-white font-semibold rounded-lg">
                 {% endif %}
                     Checkout
-                </button>
+                </a>
             </div>
         </div>
     </div>
