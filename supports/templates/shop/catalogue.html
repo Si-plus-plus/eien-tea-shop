@@ -29,7 +29,7 @@
                     <img class="w-full h-48 object-cover" src="{{ item.image.url }}">
 
                     {% if item.is_newly_added %}
-                        <div class="absolute top-1 left-1 pl-2">
+                        <div class="absolute top-2 left-1 pl-2">
                             <span class="inline-block bg-blue-400 text-white rounded-full px-3 text-sm font-bold">
                                 NEW
                             </span>
@@ -37,8 +37,8 @@
                     {% endif %}
 
                     {% if item.is_discounted %}
-                        <div class="absolute top-1 right-1 mr-2">
-                            <span class="inline-block bg-red-400 text-white rounded-full px-3 text-sm font-bold mr-2">
+                        <div class="absolute top-2 right-1 pr-2">
+                            <span class="inline-block bg-red-400 text-white rounded-full px-3 text-sm font-bold">
                                 {{ item.get_discount_percentage }}
                             </span>
                         </div>
