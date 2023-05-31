@@ -33,23 +33,25 @@
                 <tbody>
                     {% for item in transaction.cart.all %}
                         <tr>
-                            <td class="flex flex-wrap h-30 my-2">
-                                <div class="w-1/4">
-                                    <img src="{{ item.item.image.url }}" class="h-24 object-cover rounded-lg overflow-hidden bg-white border border-gray-200">
-                                </div>
-                                <div class="w-3/4 h-28 pt-4 px-4 inline-block items-middle align-middle">
-                                    <div class="text-lg font-semibold truncate">
-                                        {{ item.item.name }}
-                                        {% if item.item.is_discounted %}
-                                            <span class="bg-red-400 text-white rounded-full px-2 text-sm font-bold mr-2">
-                                                {{ item.item.get_discount_percentage }}
-                                            </span>
-                                        {% endif %}
+                            <td>
+                                <a href="{{ item.get_absolute_url }}" class="flex flex-wrap h-30 my-2">
+                                    <div class="w-1/4 relative">
+                                        <img src="{{ item.item.image.url }}" class="h-24 object-cover rounded-lg overflow-hidden bg-white border border-gray-200">
                                     </div>
-                                    <div class="text-sm">
-                                        {{ item.variation.name }}
+                                    <div class="w-3/4 h-28 pt-4 px-4 inline-block items-middle align-middle">
+                                        <div class="text-lg font-semibold truncate">
+                                            {{ item.item.name }}
+                                            {% if item.item.is_discounted %}
+                                                <span class="bg-red-400 text-white rounded-full px-2 text-sm font-bold mr-2">
+                                                    {{ item.item.get_discount_percentage }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="text-sm">
+                                            {{ item.variation.name }}
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </td>
                             <td>
                                 <div class="text-center flex flex-wrap ">
