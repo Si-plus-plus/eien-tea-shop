@@ -4,6 +4,8 @@ from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
 
 from math import ceil
+from datetime import timedelta
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -88,6 +90,9 @@ class Item(models.Model):
 
     def is_active(self):
         return self.active
+
+    def is_newly_added(self):
+        return timezone.now() < self.created_at + timedelta(days=7)
 
     #TODO implement functions to get formatted price/discounted price
 
