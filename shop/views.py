@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from .models import Item, Cart, Address
-from .utils import get_or_set_session, get_or_set_transaction_session
-from .forms import AddToCartForm, AddressForm
+from .utils import get_or_set_session, get_or_set_transaction_session, set_payment
+from .forms import AddToCartForm, AddressForm, PaymentForm
+from django.utils import timezone
 
 from itertools import chain
 
@@ -97,12 +98,43 @@ class RemoveFromCartView(generic.View):
         return redirect('shop:cart')
 
 
+class PaymentView(generic.FormView):
+    template_name = 'shop/payment.html'
+    form_class = PaymentForm
+
+    def get_success_url(self):
+        return reverse('home') #TODO transaction history
+
+    def get_form_kwargs(self):
+        kwargs = super(PaymentView, self).get_form_kwargs()
+        kwargs["user_id"] = self.request.user.id
+        return kwargs
+
+    def form_valid(self, form):
+        payment = set_payment(self.request)
+
+        payment.payment_method = form.cleaned_data['payment_method']
+        payment.success = True
+        payment.save()
+
+        transaction = get_or_set_transaction_session(self.request)
+        transaction.payment = payment
+        transaction.save()
+
+        return super(PaymentView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(PaymentView, self).get_context_data(**kwargs)
+        context['transaction'] = get_or_set_transaction_session(self.request)
+        return context
+
+
 class CheckoutView(generic.FormView):
     template_name = 'shop/checkout.html'
     form_class = AddressForm
 
     def get_success_url(self):
-        return reverse('home') #TODO to payment
+        return reverse('shop:payment')
 
     def get_form_kwargs(self):
         kwargs = super(CheckoutView, self).get_form_kwargs()

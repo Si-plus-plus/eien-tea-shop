@@ -35,6 +35,7 @@ class Address(models.Model):
     shipping_address = models.CharField(max_length=150)
     shipping_notes = models.CharField(max_length=150, null=True, blank=True)
     city = models.CharField(max_length=50)
+    country = models.CharField(max_length=50, default="Indonesia")
     postal_code = models.CharField(max_length=10)
     default = models.BooleanField(default=False)
 
@@ -49,7 +50,6 @@ class Address(models.Model):
 
 class Variation(models.Model):
     name = models.CharField(max_length=20)
-    stock = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -110,14 +110,30 @@ class Item(models.Model):
         return f"-{ceil(self.get_discount_value()/self.price * 100)}%"
 
 
+class PaymentMethod(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+
+class Payment(models.Model):
+    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    success = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.pk}"
+
+
 class Transaction(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    paid_at = models.DateTimeField(null=True, blank=True)
     shipping_address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.DO_NOTHING)
+    payment = models.ForeignKey(Payment, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.pk)
+        return self.pk
 
     def get_total_price(self):
         total = 0
@@ -154,18 +170,3 @@ class Cart(models.Model):
     def get_total_item_discounted_price(self):
         return self.quantity * self.item.discounted_price
 
-
-class Payment(models.Model):
-    PAYMENT_METHODS = (
-        ('Paypal', 'VA BCA'),
-    )
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
-    payment_method = models.CharField(max_length=30, choices=PAYMENT_METHODS)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    success = models.BooleanField(default=False)
-
-    amount_paid = models.IntegerField()
-    raw_response = models.TextField()
-
-    def __str__(self):
-        return f"Order: {self.transaction}/ Payment:-{self.pk}"

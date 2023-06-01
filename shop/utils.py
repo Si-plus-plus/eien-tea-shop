@@ -1,4 +1,4 @@
-from .models import Transaction
+from .models import Transaction, Payment
 
 
 def get_or_set_session(request):
@@ -25,9 +25,15 @@ def get_or_set_transaction_session(request):
     except Transaction.DoesNotExist:
         transaction = Transaction()
         transaction.save()
-        request.session['order_id'] = transaction.id
+        request.session['transaction_id'] = transaction.id
 
     if request.user.is_authenticated and transaction.user is None:
         transaction.user = request.user
         transaction.save()
     return transaction
+
+
+def set_payment(request):
+    payment = Payment()
+
+    return payment

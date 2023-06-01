@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cart, Variation, Item, Address
+from .models import Cart, Variation, Item, Address, Payment, Transaction, PaymentMethod
 
 from django.contrib.auth import get_user_model
 
@@ -78,3 +78,16 @@ class AddressForm(forms.Form):
                 self.add_error('city', 'This field is required')
             if not data.get('postal_code', None):
                 self.add_error('postal_code', 'This field is required')
+
+
+class PaymentForm(forms.Form):
+    payment_method = forms.ModelChoiceField(PaymentMethod.objects.none())
+
+    def __init__(self, *args, **kwargs):
+        user_id = kwargs.pop('user_id')
+
+        super().__init__(*args, **kwargs)
+        payment_method_queryset = PaymentMethod.objects.all()
+        self.fields['payment_method'].queryset = payment_method_queryset
+
+        self.user_id = user_id

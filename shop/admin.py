@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Category, Type, Transaction, Cart, Address, Variation
+from .models import Item, Category, Type, Transaction, Cart, Address, Variation, PaymentMethod, Payment
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -17,9 +17,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = [
-        'id',
         'user',
-        'paid_at',
         'shipping_address',
     ]
 
@@ -31,6 +29,14 @@ class CartAdmin(admin.ModelAdmin):
         'variation',
         'quantity',
         'buy_price',
+    ]
+
+
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = [
+        'payment_method',
+        'timestamp',
+        'success',
     ]
 
 
@@ -53,3 +59,5 @@ admin.site.register(Category)
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Address, AddressAdmin)
+admin.site.register(PaymentMethod)
+admin.site.register(Payment, PaymentAdmin)
