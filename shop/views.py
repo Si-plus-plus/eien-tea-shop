@@ -109,6 +109,16 @@ class CheckoutView(generic.FormView):
         kwargs["user_id"] = self.request.user.id
         return kwargs
 
+    def freeze_buy_price(self, transaction):
+        cart_items = Cart.objects.filter(transaction=transaction)
+
+        for item in cart_items:
+            if item.item.is_discounted():
+                item.buy_price = item.item.discounted_price
+            else:
+                item.buy_price = item.item.price
+            item.save()
+
     def form_valid(self, form):
         transaction = get_or_set_transaction_session(self.request)
         selected_shipping_address = form.cleaned_data.get('selected_shipping_address')
@@ -125,6 +135,8 @@ class CheckoutView(generic.FormView):
                 postal_code = form.cleaned_data['postal_code'],
             )
             transaction.shipping_address = new_address
+
+        self.freeze_buy_price(transaction)
 
         transaction.save()
 

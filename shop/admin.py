@@ -26,6 +26,7 @@ class TransactionAdmin(admin.ModelAdmin):
 
 class CartAdmin(admin.ModelAdmin):
     list_display = [
+        'transaction',
         'item',
         'variation',
         'quantity',
