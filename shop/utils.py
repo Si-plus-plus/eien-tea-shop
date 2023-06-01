@@ -33,7 +33,13 @@ def get_or_set_transaction_session(request):
     return transaction
 
 
-def set_payment(request):
-    payment = Payment()
+def get_or_set_payment(request):
+    transaction_id = request.session.get('transaction_id', None)
+
+    try:
+        payment = Payment.objects.get(id=transaction_id)
+    except Payment.DoesNotExist:
+        payment = Payment()
+        payment.save()
 
     return payment

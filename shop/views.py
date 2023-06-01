@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from .models import Item, Cart, Address
-from .utils import get_or_set_session, get_or_set_transaction_session, set_payment
+from .utils import get_or_set_session, get_or_set_transaction_session, get_or_set_payment
 from .forms import AddToCartForm, AddressForm, PaymentForm
 from django.utils import timezone
 
@@ -111,7 +111,7 @@ class PaymentView(generic.FormView):
         return kwargs
 
     def form_valid(self, form):
-        payment = set_payment(self.request)
+        payment = get_or_set_payment(self.request)
 
         payment.payment_method = form.cleaned_data['payment_method']
         payment.success = True
