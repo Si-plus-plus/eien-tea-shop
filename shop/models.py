@@ -31,7 +31,7 @@ class Type(models.Model):
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    label_name = models.CharField(max_length=100)
     shipping_address = models.CharField(max_length=150)
     shipping_notes = models.CharField(max_length=150, null=True, blank=True)
     city = models.CharField(max_length=50)
@@ -39,7 +39,7 @@ class Address(models.Model):
     default = models.BooleanField(default=False)
 
     def __str__(self):
-        address_string = f"{self.name}: {self.shipping_address}, {self.city}, {self.postal_code}"
+        address_string = f"{self.label_name}: {self.shipping_address}, {self.city}, {self.postal_code}"
 
         if self.shipping_notes:
             address_string += f" [{self.shipping_notes}]"

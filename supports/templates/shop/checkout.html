@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
+
+{% block content %}
+
+<div class="max-w-screen-lg mx-auto">
+    <div class="flex flex-wrap justify-between pt-8 pl-8 mb-4 bg-white p-8 rounded-lg align-middle">
+        <div class="text-3xl font-bold ">
+            Checkout
+        </div>
+        <a href="{% url 'shop:cart' %}" class="px-4 py-2 border text-green-600 border-green-600 hover:bg-green-600 hover:text-white rounded-lg">
+            Edit Cart
+        </a>
+    </div>
+    <div class="flex flex-wrap my-6">
+        <div class="w-1/2 bg-white p-4 rounded-lg h-fit">
+            <div class="text-xl font-semibold p-4">
+                Your Order
+            </div>
+            <hr class="mb-4">
+            <table class="table-auto w-full">
+                <thead>
+                    {% if transaction.cart.count > 0 %}
+                        <tr>
+                            <th class="w-6/12 py-4">
+                                Name
+                            </th>
+                            <th class="w-1/12 pr-4 py-4">
+                                Qty
+                            </th>
+                            <th class="w-5/12 py-4">
+                                Price
+                            </th>
+                        </tr>
+                    {% endif %}
+                </thead>
+                <tbody class="mt-6">
+                    {% for item in transaction.cart.all %}
+                        <tr class="align-top">
+                            <td class="">
+                                <div class="h-20 px-4 inline-block items-middle align-middle">
+                                    <div class="w-64 text-base font-semibold truncate">
+                                        {{ item.item.name }}
+                                    </div>
+                                    <div class="text-sm">
+                                        {{ item.variation.name }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="pr-4">
+                                <div class="text-center">
+                                    {{ item.quantity }}
+                                </div>
+                            </td>
+                            <td class="items-end">
+                                <div class="flex">
+                                    <div class="text-right">
+                                        {% if item.item.is_discounted %}
+                                            <div class="font-base">Rp{{ item.item.discounted_price }}</div>
+                                        {% else %}
+                                            <div class="font-base">Rp{{ item.item.price }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                    <tr>
+                        <td class="text-center text-gray-400">
+                            No items to checkout
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="mx-4">
+                <hr>
+                <div class="flex flex-wrap justify-between mt-4">
+                    <span>Subtotal</span>
+                    <span>Rp{{ transaction.get_total_discounted_price }}</span>
+                </div>
+                <div class="flex flex-wrap justify-between">
+                    <span>Shipping Fee</span>
+                    <span>Rp0</span>
+                </div>
+                <hr class="my-4">
+                <div class="flex flex-wrap justify-between mb-8">
+                    <span>Total</span>
+                    <span class="font-semibold">Rp{{ transaction.get_total_discounted_price }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="w-1/2 pl-4">
+            <div class="bg-white p-4 rounded-lg h-fit">
+                <div class="text-xl font-semibold p-4">
+                    Shipping Address
+                </div>
+                <hr class="mb-4">
+                <form method="POST" class="p-4">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+
+                    <div class="mt-4">
+                        {% if transaction.cart.count > 0 %}
+                            <button type="submit" class="block w-full px-4 py-2 mb-4 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
+                                Use this Shipping Address
+                            </button>
+                        {% else %}
+                            <button disabled class="block w-full px-4 py-2 mb-4 bg-gray-300 text-white font-semibold rounded-lg">
+                                No items to checkout
+                            </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
-from .models import Item, Cart
-from .utils import get_or_set_session
-from .forms import AddToCartForm
+from .models import Item, Cart, Address
+from .utils import get_or_set_session, get_or_set_transaction_session
+from .forms import AddToCartForm, AddressForm
 
 from itertools import chain
 
@@ -94,3 +95,42 @@ class RemoveFromCartView(generic.View):
         cart_item = get_object_or_404(Cart, id=kwargs['pk'])
         cart_item.delete()
         return redirect('shop:cart')
+
+
+class CheckoutView(generic.FormView):
+    template_name = 'shop/checkout.html'
+    form_class = AddressForm
+
+    def get_success_url(self):
+        return reverse('home') #TODO to payment
+
+    def get_form_kwargs(self):
+        kwargs = super(CheckoutView, self).get_form_kwargs()
+        kwargs["user_id"] = self.request.user.id
+        return kwargs
+
+    def form_valid(self, form):
+        transaction = get_or_set_transaction_session(self.request)
+        selected_shipping_address = form.cleaned_data.get('selected_shipping_address')
+
+        if selected_shipping_address:
+            transaction.shipping_address = selected_shipping_address
+        else:
+            new_address = Address.objects.create(
+                user = self.request.user,
+                label_name = form.cleaned_data['label_name'],
+                shipping_address = form.cleaned_data['shipping_address'],
+                shipping_notes = form.cleaned_data['shipping_notes'],
+                city = form.cleaned_data['city'],
+                postal_code = form.cleaned_data['postal_code'],
+            )
+            transaction.shipping_address = new_address
+
+        transaction.save()
+
+        return super(CheckoutView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(CheckoutView, self).get_context_data(**kwargs)
+        context['transaction'] = get_or_set_transaction_session(self.request)
+        return context
