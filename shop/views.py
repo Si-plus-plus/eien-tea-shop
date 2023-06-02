@@ -1,8 +1,11 @@
+from random import randint
+
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
-from .models import Item, Cart, Address
-from .utils import get_or_set_session, get_or_set_transaction_session, get_or_set_payment
+from .models import Item, Cart, Address, Transaction, Payment
+from .utils import get_or_set_session
 from .forms import AddToCartForm, AddressForm, PaymentForm
 from django.utils import timezone
 
@@ -104,7 +107,7 @@ class PaymentView(generic.FormView):
     form_class = PaymentForm
 
     def get_success_url(self):
-        return reverse('home') #TODO transaction history
+        return reverse('shop:transactions-list') #TODO transaction history
 
     def get_form_kwargs(self):
         kwargs = super(PaymentView, self).get_form_kwargs()
@@ -112,21 +115,21 @@ class PaymentView(generic.FormView):
         return kwargs
 
     def form_valid(self, form):
-        payment = get_or_set_payment(self.request)
-
+        payment = Payment()
         payment.payment_method = form.cleaned_data['payment_method']
         payment.success = True
         payment.save()
 
-        transaction = get_or_set_transaction_session(self.request)
+        transaction = get_or_set_session(self.request)
         transaction.payment = payment
+        transaction.finished = True
         transaction.save()
 
         return super(PaymentView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(PaymentView, self).get_context_data(**kwargs)
-        context['transaction'] = get_or_set_transaction_session(self.request)
+        context['transaction'] = get_or_set_session(self.request)
         return context
 
 
@@ -142,6 +145,13 @@ class CheckoutView(generic.FormView):
         kwargs["user_id"] = self.request.user.id
         return kwargs
 
+    def gen_invoice_no(self, transaction):
+        prefix = ""
+        for i in range(3):
+            prefix += chr(65 + randint(0, 25))
+        prefix = prefix + '/' + str(transaction.pk)
+        return prefix
+
     def freeze_buy_price(self, transaction):
         cart_items = Cart.objects.filter(transaction=transaction)
 
@@ -153,8 +163,8 @@ class CheckoutView(generic.FormView):
             item.save()
 
     def form_valid(self, form):
-        transaction = get_or_set_transaction_session(self.request)
-        selected_shipping_address = form.cleaned_data.get('selected_shipping_address')
+        transaction = get_or_set_session(self.request)
+        selected_shipping_address = form.cleaned_data.get('select_address')
 
         if selected_shipping_address:
             transaction.shipping_address = selected_shipping_address
@@ -170,11 +180,22 @@ class CheckoutView(generic.FormView):
             transaction.shipping_address = new_address
 
         self.freeze_buy_price(transaction)
+        transaction.invoice_no = self.gen_invoice_no(transaction)
+
         transaction.save()
 
         return super(CheckoutView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(CheckoutView, self).get_context_data(**kwargs)
-        context['transaction'] = get_or_set_transaction_session(self.request)
+        context['transaction'] = get_or_set_session(self.request)
+        return context
+
+
+class TransactionsListView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'shop/transactions_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TransactionsListView, self).get_context_data(**kwargs)
+        context['transactions'] = Transaction.objects.filter(user=self.request.user, finished=True)
         return context

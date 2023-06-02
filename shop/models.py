@@ -1,3 +1,5 @@
+import hashlib
+
 from django.db import models
 from django.utils.text import slugify
 from django.shortcuts import reverse
@@ -6,6 +8,7 @@ from django.contrib.auth import get_user_model
 from math import ceil
 from datetime import timedelta
 from django.utils import timezone
+import datetime
 
 User = get_user_model()
 
@@ -128,12 +131,20 @@ class Payment(models.Model):
 
 class Transaction(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    invoice_no = models.CharField(null=True, blank=True, max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
     shipping_address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.DO_NOTHING)
     payment = models.ForeignKey(Payment, null=True, blank=True, on_delete=models.CASCADE)
+    finished = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
+
+    def get_invoice_no(self):
+        return f"ORDER-{self.pk}"
+
+    def get_date(self):
+        return self.created_at.strftime("%d-%B-%Y")
 
     def get_total_price(self):
         total = 0
