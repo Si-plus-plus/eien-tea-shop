@@ -197,5 +197,5 @@ class TransactionsListView(LoginRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(TransactionsListView, self).get_context_data(**kwargs)
-        context['transactions'] = Transaction.objects.filter(user=self.request.user, finished=True)
+        context['transactions'] = Transaction.objects.filter(user=self.request.user, finished=True).order_by('-created_at')
         return context
