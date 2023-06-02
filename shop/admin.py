@@ -19,6 +19,7 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = [
         'user',
         'shipping_address',
+        'finished',
     ]
 
 
@@ -36,7 +37,6 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = [
         'payment_method',
         'timestamp',
-        'success',
     ]
 
 

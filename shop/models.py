@@ -123,7 +123,6 @@ class PaymentMethod(models.Model):
 class Payment(models.Model):
     payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    success = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.pk}"

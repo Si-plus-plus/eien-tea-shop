@@ -117,7 +117,6 @@ class PaymentView(generic.FormView):
     def form_valid(self, form):
         payment = Payment()
         payment.payment_method = form.cleaned_data['payment_method']
-        payment.success = True
         payment.save()
 
         transaction = get_or_set_session(self.request)

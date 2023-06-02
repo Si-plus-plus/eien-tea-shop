@@ -10,6 +10,7 @@ def get_or_set_session(request):
         transaction = Transaction.objects.get(id=transaction_id)
         if transaction.finished:
             make_new_session = True
+
     except Transaction.DoesNotExist:
         make_new_session = True
 
