@@ -10,7 +10,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('', views.HomeView.as_view(), name='home'),
     path('shop/', include('shop.urls', namespace='shop')),
-    path('address/', views.AddressView.as_view(), name='profile'),
+    path('core/', include('core.urls', namespace='core')),
 ]
 
 if settings.DEBUG:

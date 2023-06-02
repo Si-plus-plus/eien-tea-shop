@@ -14,14 +14,13 @@ from itertools import chain
 
 class CatalogueView(generic.ListView):
     template_name = 'shop/catalogue.html'
-
-    #TODO return items in stock, then items not in stock
-
     queryset = Item.objects.filter(active=True).order_by('-stock')
 
-    context = {
-        'item_list': queryset,
-    }
+    def get_context_data(self, **kwargs):
+        # TODO return items in stock, then items not in stock
+        context = super(CatalogueView, self).get_context_data(**kwargs)
+        context['item_list'] = self.queryset
+        return context
 
 
 class ItemDetailView(generic.FormView):
