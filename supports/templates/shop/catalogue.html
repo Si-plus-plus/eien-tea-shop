@@ -1,20 +1,10 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "components/content_template.html" %}
 
-{% block content %}
+{% block content_title %}
+Cart
+{% endblock content_title %}
 
-<section class="relative bg-[url({% static 'images/banner.jpg' %})] bg-cover bg-center bg-no-repeat" >
-    <div class="backdrop-brightness-50">
-        <div class="max-w-screen-lg mx-auto text-white py-12">
-            <p class="text-3xl font-semibold text-white-800">
-                Discover our exquisite Japanese tea collections
-            </p>
-            <p >
-                Each seasons, we embark to discover the best harvests, in search of the finest tea experience.
-            </p>
-        </div>
-    </div>
-</section>
+{% block content_container %}
 
 <div class="max-w-screen-lg mx-auto flex flex-wrap my-6">
     <div class="w-1/4 pt-4 pr-4">
@@ -80,4 +70,4 @@
 </div>
 
 
-{% endblock content %}
+{% endblock content_container %}

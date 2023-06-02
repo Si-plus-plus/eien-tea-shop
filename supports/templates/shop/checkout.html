@@ -1,16 +1,14 @@
-{% extends "base.html" %}
+{% extends "components/content_template.html" %}
+
 {% load static %}
 {% load crispy_forms_tags %}
 {% load tailwind_filters %}
 
-{% block content %}
+{% block content_title %}
+Checkout
+{% endblock content_title %}
 
-<div class="max-w-screen-lg mx-auto">
-    <div class="flex flex-wrap justify-between mb-4 bg-white p-8 rounded-lg align-middle">
-        <div class="text-3xl font-bold ">
-            Checkout
-        </div>
-    </div>
+{% block content_container %}
     <div class="flex flex-wrap my-6">
         <div class="w-1/2 bg-white p-4 rounded-lg h-fit">
             <div class="flex flex-wrap justify-between align-middle p-4">
@@ -141,6 +139,5 @@
             </div>
         </div>
     </div>
-</div>
 
-{% endblock content %}
+{% endblock content_container %}

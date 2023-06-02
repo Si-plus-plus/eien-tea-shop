@@ -1,10 +1,12 @@
-{% extends "base.html" %}
+{% extends "components/content_template.html" %}
+
 {% load crispy_forms_tags %}
 {% load tailwind_filters %}
 
-{% block content %}
+{% block content_title %}
+{% endblock content_title %}
 
-<div class="max-w-screen-lg mx-auto">
+{% block content_container %}
     TODO Breadcrumbs
     <div class="flex flex-wrap">
         <div class="relative m-4 h-96">
@@ -24,7 +26,7 @@
                 </div>
             {% endif %}
         </div>
-        <div class="w-1/2 my-4 ml-4 p-2 bg-white p-8 rounded-lg relative">
+        <div class="w-auto my-4 ml-4 p-2 bg-white p-8 rounded-lg relative">
             <div class="text-2xl font-bold truncate">
                 {{ item.name }}
             </div>
@@ -45,7 +47,7 @@
             <div class="">
                 <form method="POST" class="">
                     {% csrf_token %}
-                    <div class="flex flex-wrap inline-block align-bottom w-full h-fit m-auto">
+                    <div class="flex flex-wrap inline-block align-bottom h-fit">
                         <div class="pr-4 w-1/2">
                             {{ form.variation | as_crispy_field }}
                         </div>
@@ -97,7 +99,5 @@
             </div>
         </div>
     </div>
-</div>
 
-
-{% endblock content %}
+{% endblock content_container %}
