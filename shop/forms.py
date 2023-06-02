@@ -35,7 +35,7 @@ class AddToCartForm(forms.ModelForm):
         #     ),
         #     Row(
         #         Submit('submit', 'Add to cart',
-        #                css_class='px-4 py-2 cursor-pointer bg-transparent hover:bg-green-700 text-green-700 font-semibold hover:text-white border border-green-700 hover:border-transparent rounded'),
+        #                css_class='px-4 py-2 cursor-pointer bg-transparent hover:bg-green-600 text-green-600 font-semibold hover:text-white border border-green-600 hover:border-transparent rounded'),
         #         wrapper_class="content-end"
         #     )
         # )

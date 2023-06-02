@@ -2,23 +2,15 @@
 {% load cart_tags %}
 
 <header class="max-w-screen-xl mx-auto">
-    <div class=" flex flex-row items-center justify-between p-4">
-        <div class="basis-1/4">
+    <div class="w-full flex flex-row items-center justify-between p-4">
+        <div class="">
             <a href="{% url 'home' %}" class="">
                 <img src="{% static 'images/logo.png' %}" style="max-width: 150px;"/>
             </a>
         </div>
-        <div class="flex-none basis-2/5">
-            <div class="relative hidden flex">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <i class="fas fa-search"></i>
-                </div>
-                <input type="text" id="search-navbar" class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-green-500 focus:border-green-500" placeholder="Search...">
-            </div>
-        </div>
-        <div class="flex-none basis-1/4 items-end">
+        <div class="flex-none items-end">
             <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border md:flex-row md:space-x-8 md:mt-0 md:border-0">
-                <li lass="flex-none">
+                <li lass="e">
                     <a href="{% url 'shop:cart' %}" class="hover:text-green-600 relative flex">
                         <i class="fas fa-shopping-cart mt-2 mr-2"></i>
                         <div class="absolute right-0 top-0 rounded-full bg-red-400 w-4 h-4 text-white font-bold text-xs leading-tight text-center">
@@ -26,39 +18,44 @@
                         </div>
                     </a>
                 </li>
-                <li lass="flex-none">
-                    <div class="relative inline-block text-left dropdown rounded-full">
-                        <button class="inline-flex justify-center w-full px-4 py-2 text-sm leading-5 bg-white border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300"
+                <li lass="">
+                    <div class="relative inline-block text-left dropdown">
+                        <button class="inline-flex justify-center w-full px-4 py-2 text-base border rounded-lg border-green-600 hover:text-green-600 focus:bg-green-600 focus:text-white focus:rounded-none focus:rounded-t-lg duration-200"
                            type="button" aria-haspopup="true" aria-expanded="true" aria-controls="headlessui-menu-items-117">
-                            Account <i class="fas fa-chevron-down pl-4"></i>
+                            {% if request.user.is_authenticated %}
+                                {{ user.email }}
+                            {% else %}
+                                Guest
+                            {% endif %}
+                            <i class="fas fa-chevron-down pl-4 pt-1"></i>
                             </button>
                         </span>
-                        <div class="opacity-0 invisible dropdown-menu transition-all origin-top-right scale-95">
-                            <ul class="absolute right-0 mt-2 origin-top-left bg-white border border-gray-200 divide-y divide-gray-100 rounded-md outline-none text-right font-light" role="menu">
+                        <div class="opacity-0 invisible dropdown-menu transition-all origin-top-right">
+                            <ul class="z-10 w-full absolute right-0 origin-top-left bg-white border border-gray-200 divide-y divide-gray-100 rounded-b-lg outline-none text-right font-normal" role="menu">
                                 {% if request.user.is_authenticated %}
                                     <li class="px-4 py-2">
-                                        <a href="{% url 'profile' %}">
-                                            Profile
-                                        </a>
-                                    </li>
-                                    <li class="px-4 py-2">
-                                        <a href="{% url 'shop:transactions-list' %}">
+                                        <a href="{% url 'shop:transactions-list' %}" class="hover:text-green-600">
                                             Transactions
                                         </a>
                                     </li>
                                     <li class="px-4 py-2">
-                                        <a href="{% url 'account_logout' %}">
+                                        <a href="{% url 'profile' %}" class="hover:text-green-600">
+                                            Manage Addresses
+                                        </a>
+                                    </li>
+                                    <li class="px-4 py-2">
+                                        <a href="{% url 'account_logout' %}" class="hover:text-red-600">
                                             Log Out
                                         </a>
                                     </li>
                                 {% else %}
                                     <li class="px-4 py-2">
-                                        <a href="{% url 'account_signup' %}">
+                                        <a href="{% url 'account_signup' %}" class="hover:text-green-600">
                                             Register
                                         </a>
                                     </li>
                                     <li class="px-4 py-2">
-                                        <a href="{% url 'account_login' %}">
+                                        <a href="{% url 'account_login' %}" class="hover:text-green-600">
                                             Log in
                                         </a>
                                     </li>
