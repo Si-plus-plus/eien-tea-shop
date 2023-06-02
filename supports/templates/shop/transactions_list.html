@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="max-w-screen-lg mx-auto">
+    <div class="flex flex-wrap justify-between mb-4 bg-white p-8 rounded-lg align-middle">
+        <div class="text-3xl font-bold ">
+            Transactions List
+        </div>
+    </div>
+    <div class="flex flex-wrap my-6 bg-white p-4 rounded-lg h-fit">
+        <table class="w-full table-auto">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Invoice No
+                    </th>
+                    <th>
+                        Orders
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                    <th>
+                        Payment
+                    </th>
+                    <th>
+                        Shipping Address
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="">
+                {% for transaction in transactions %}
+                    <tr class="py-2">
+                        <td>
+                            {{ transaction.get_date }}
+                        </td>
+                        <td>
+                            {{ transaction.invoice_no }}
+                        </td>
+                        <td>
+                            Orders
+                        </td>
+                        <td>
+                            {{ transaction.get_total_price }}
+                        </td>
+                        <td>
+                            {{ transaction.payment.payment_method }}
+                        </td>
+                        <td>
+                            {{ transaction.shipping_address }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

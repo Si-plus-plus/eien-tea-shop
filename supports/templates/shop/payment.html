@@ -6,7 +6,7 @@
 {% block content %}
 
 <div class="max-w-screen-lg mx-auto">
-    <div class="flex flex-wrap justify-between pt-8 pl-8 mb-4 bg-white p-8 rounded-lg align-middle">
+    <div class="flex flex-wrap justify-between mb-4 bg-white p-8 rounded-lg align-middle">
         <div class="text-3xl font-bold ">
             Payment
         </div>
@@ -14,7 +14,7 @@
     TODO Payment stuffs
     <form method="POST">
         {% csrf_token %}
-        {{ form | crispy }}
+        {{ form.payment_method | as_crispy_field }}
         <button type='submit' class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
             Pay
         </button>

@@ -37,13 +37,18 @@
                             <ul class="absolute right-0 mt-2 origin-top-left bg-white border border-gray-200 divide-y divide-gray-100 rounded-md outline-none text-right font-light" role="menu">
                                 {% if request.user.is_authenticated %}
                                     <li class="px-4 py-2">
-                                        <a href="/">
-                                            Edit Profile
+                                        <a href="{% url 'profile' %}">
+                                            Profile
                                         </a>
                                     </li>
                                     <li class="px-4 py-2">
-                                        <a href="/">
-                                            Sign Out
+                                        <a href="{% url 'shop:transactions-list' %}">
+                                            Transactions
+                                        </a>
+                                    </li>
+                                    <li class="px-4 py-2">
+                                        <a href="{% url 'account_logout' %}">
+                                            Log Out
                                         </a>
                                     </li>
                                 {% else %}
@@ -53,8 +58,8 @@
                                         </a>
                                     </li>
                                     <li class="px-4 py-2">
-                                        <a href="/">
-                                            Sign in
+                                        <a href="{% url 'account_login' %}">
+                                            Log in
                                         </a>
                                     </li>
                                 {% endif %}
