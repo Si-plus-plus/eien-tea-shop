@@ -62,7 +62,7 @@ class AddressForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         user = User.objects.get(id=user_id)
-        shipping_address_queryset = Address.objects.filter(user=user)
+        shipping_address_queryset = Address.objects.filter(user=user, is_deleted=False)
 
         self.fields['select_address'].queryset = shipping_address_queryset
         self.fields['select_address'].label = False
