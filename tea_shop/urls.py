@@ -7,8 +7,10 @@ from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     path('', views.HomeView.as_view(), name='home'),
     path('shop/', include('shop.urls', namespace='shop')),
+    path('profile/', views.ProfileView.as_view(), name='profile'),
 ]
 
 if settings.DEBUG:
