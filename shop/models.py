@@ -43,11 +43,9 @@ class Address(models.Model):
     default = models.BooleanField(default=False)
 
     def __str__(self):
-        address_string = f"{self.label_name}: {self.shipping_address}, {self.city}, {self.postal_code}"
-
+        address_string = f"{self.label_name}: {self.shipping_address}, {self.city}, {self.country}, {self.postal_code}"
         if self.shipping_notes:
             address_string += f" [{self.shipping_notes}]"
-
         return address_string
 
 

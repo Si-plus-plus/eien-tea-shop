@@ -50,6 +50,7 @@ class AddressForm(forms.Form):
     shipping_address = forms.CharField(max_length=150, required=False)
     shipping_notes = forms.CharField(max_length=150, required=False)
     city = forms.CharField(max_length=50, required=False)
+    country = forms.CharField(max_length=50, required=False)
     postal_code = forms.CharField(widget=forms.TextInput(attrs={'type': 'number'}), required=False)
 
     select_address = forms.ModelChoiceField(

@@ -46,6 +46,7 @@ class AddressAdmin(admin.ModelAdmin):
         'shipping_address',
         'shipping_notes',
         'city',
+        'country',
         'postal_code',
         'default',
     ]
