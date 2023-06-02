@@ -139,11 +139,15 @@ class Transaction(models.Model):
     def __str__(self):
         return str(self.pk)
 
-    def get_invoice_no(self):
-        return f"ORDER-{self.pk}"
-
     def get_date(self):
         return self.created_at.strftime("%d-%B-%Y")
+
+    def get_items_summary(self) -> str:
+        summary = ""
+        for cart_items in self.cart.all():
+            item = f"{cart_items.item.name}, {cart_items.variation}"
+            summary += item + '\n'
+        return summary
 
     def get_total_price(self):
         total = 0

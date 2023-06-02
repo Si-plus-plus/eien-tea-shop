@@ -145,7 +145,8 @@ class CheckoutView(generic.FormView):
         return kwargs
 
     def gen_invoice_no(self, transaction):
-        prefix = ""
+        prefix = transaction.created_at.strftime("%Y%m%d")
+        prefix += '/'
         for i in range(3):
             prefix += chr(65 + randint(0, 25))
         prefix = prefix + '/' + str(transaction.pk)
