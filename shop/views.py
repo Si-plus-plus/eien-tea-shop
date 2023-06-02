@@ -99,6 +99,7 @@ class RemoveFromCartView(generic.View):
 
 
 class PaymentView(generic.FormView):
+    #TODO integrate paypal
     template_name = 'shop/payment.html'
     form_class = PaymentForm
 
@@ -169,7 +170,6 @@ class CheckoutView(generic.FormView):
             transaction.shipping_address = new_address
 
         self.freeze_buy_price(transaction)
-
         transaction.save()
 
         return super(CheckoutView, self).form_valid(form)

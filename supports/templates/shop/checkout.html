@@ -83,7 +83,7 @@
                 </div>
                 <div class="flex flex-wrap justify-between">
                     <span>Shipping Fee</span>
-                    <span>Rp0</span>
+                    <span class="text-green-600">FREE</span>
                 </div>
                 <hr class="my-4">
                 <div class="flex flex-wrap justify-between mb-8">
@@ -94,18 +94,37 @@
         </div>
         <div class="w-1/2 pl-4">
             <div class="bg-white p-4 rounded-lg h-fit">
-                <div class="text-xl font-semibold p-4">
-                    Shipping Address
-                </div>
-                <hr class="mb-4">
                 <form method="POST" class="p-4">
                     {% csrf_token %}
-                    {{ form | crispy }}
+<!--                    TODO hide it if theres no registered address-->
+                    <div class="text-xl font-semibold pb-4">
+                        Choose your shipping address
+                    </div>
+                    {{ form.select_address | as_crispy_field }}
 
-                    <div class="mt-4">
+                    <div class="relative flex py-3 my-2 items-center">
+                        <hr class=" mr-4 flex-grow border-t"></hr>
+                        <span class="text-base text-gray-500">
+                            or
+                        </span>
+                        <hr class=" ml-4 flex-grow border-t"></hr>
+                    </div>
+
+                    <div class="text-xl font-semibold pb-4">
+                        Register a new address
+                    </div>
+
+                    {{ form.label_name | as_crispy_field }}
+                    {{ form.shipping_address | as_crispy_field }}
+                    {{ form.shipping_notes | as_crispy_field }}
+                    {{ form.city | as_crispy_field }}
+                    {{ form.postal_code | as_crispy_field }}
+
+
+                    <div class="mt-8">
                         {% if transaction.cart.count > 0 %}
                             <button type="submit" class="block w-full px-4 py-2 mb-4 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
-                                Use this Shipping Address
+                                Proceed to payment
                             </button>
                         {% else %}
                             <button disabled class="block w-full px-4 py-2 mb-4 bg-gray-300 text-white font-semibold rounded-lg">

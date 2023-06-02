@@ -52,7 +52,7 @@ class AddressForm(forms.Form):
     city = forms.CharField(max_length=50, required=False)
     postal_code = forms.CharField(widget=forms.TextInput(attrs={'type': 'number'}), required=False)
 
-    selected_shipping_address = forms.ModelChoiceField(
+    select_address = forms.ModelChoiceField(
         Address.objects.none(), required=False
     )
 
@@ -63,13 +63,14 @@ class AddressForm(forms.Form):
         user = User.objects.get(id=user_id)
         shipping_address_queryset = Address.objects.filter(user=user)
 
-        self.fields['selected_shipping_address'].queryset = shipping_address_queryset
+        self.fields['select_address'].queryset = shipping_address_queryset
+        self.fields['select_address'].label = False
 
     def clean(self):
         data = self.cleaned_data
-        selected_shipping_address = data.get('selected_shipping_address', None)
+        select_address = data.get('select_address', None)
 
-        if selected_shipping_address is None:
+        if select_address is None:
             if not data.get('label_name', None):
                 self.add_error('label_name', 'This field is required')
             if not data.get('shipping_address', None):
