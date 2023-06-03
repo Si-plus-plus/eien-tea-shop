@@ -10,7 +10,7 @@ Your Transactions
 Your Transactions
 {% endblock content_title %}
 
-{% block content_container %}
+{% block content %}
     <div class="flex flex-wrap my-6 bg-white p-8 rounded-lg h-fit">
         {% if transactions.count > 0 %}
             <table class="w-full table-fixed">
@@ -43,7 +43,7 @@ Your Transactions
                                 {{ transaction.get_items_summary | linebreaks }}
                             </td>
                             <td>
-                                Rp{{ transaction.get_total_price }}
+                                Rp{{ transaction.get_total_discounted_price }}
                             </td>
                             <td>
                                 {{ transaction.payment.payment_method }}
@@ -61,4 +61,4 @@ Your Transactions
             </div>
         {% endif %}
     </div>
-{% endblock content_container %}
+{% endblock content %}

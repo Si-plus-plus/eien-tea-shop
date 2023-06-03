@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block container %}
 
 <div class="max-w-screen-lg mx-auto pb-8">
     <div class="flex flex-wrap justify-between mb-4 bg-white p-8 rounded-lg align-middle">
@@ -10,8 +10,8 @@
         </div>
     </div>
 
-    {% block content_container %}
-    {% endblock content_container %}
+    {% block content %}
+    {% endblock content %}
 </div>
 
-{% endblock content %}
+{% endblock container %}
