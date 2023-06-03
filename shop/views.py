@@ -28,17 +28,6 @@ class CatalogueView(generic.ListView):
         return context
 
 
-class SubtractQuantityView(generic.View):
-    def get(self, request, *args, **kwargs):
-        cart_item = get_object_or_404(Cart, id=kwargs['pk'])
-        if cart_item.quantity <= 1:
-            cart_item.delete()
-        else:
-            cart_item.quantity -= 1
-            cart_item.save()
-        return redirect('shop:cart')
-
-
 class ItemDetailView(generic.FormView):
     template_name = 'shop/item.html'
     form_class = AddToCartForm
@@ -116,7 +105,7 @@ class RemoveFromCartView(generic.View):
         return redirect('shop:cart')
 
 
-class PaymentView(generic.FormView):
+class PaymentView(LoginRequiredMixin, generic.FormView):
     #TODO integrate paypal
     template_name = 'shop/payment.html'
     form_class = PaymentForm
@@ -147,7 +136,7 @@ class PaymentView(generic.FormView):
         return context
 
 
-class CheckoutView(generic.FormView):
+class CheckoutView(LoginRequiredMixin, generic.FormView):
     template_name = 'shop/checkout.html'
     form_class = AddressForm
 

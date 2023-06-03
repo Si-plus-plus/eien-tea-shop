@@ -141,13 +141,34 @@ Cart
                 <span>Total</span>
                 <span class="font-semibold">Rp{{ transaction.get_total_discounted_price }}</span>
             </div>
-            {% if transaction.cart.count > 0 %}
-                <a href="{% url 'shop:cart-checkout' %}" class="block w-full px-4 py-2 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
+            {% if request.user.is_authenticated %}
+                {% if transaction.cart.count > 0 %}
+                    <a href="{% url 'shop:cart-checkout' %}" class="block w-full px-4 py-2 mb-4 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
+                        Checkout
+                    </a>
+                {% else %}
+                    <a disabled class="block w-full px-4 py-2 mb-4 bg-gray-300 text-white font-semibold rounded-lg">
+                        No items to checkout
+                    </a>
+                {% endif %}
             {% else %}
-                <a class="block w-full px-4 py-2 bg-gray-300 text-white font-semibold rounded-lg">
+                {% if transaction.cart.count > 0 %}
+                    <a href="{% url 'account_login' %}?next={{request.path}} " class="text-center block px-4 py-2 border text-green-600 border-green-600 font-semibold hover:bg-green-600 hover:text-white rounded-lg">
+                        Log in to continue
+                    </a>
+                    <div class="text-center">
+                        or
+                        <a href="{% url 'account_signup' %}?next={{request.path}}" class="text-green-600 mx-1 font-base">
+                            register
+                        </a>
+                        a new account
+                    </div>
+                {% else %}
+                    <a disabled class="block w-full px-4 py-2 mb-4 bg-gray-300 text-white font-semibold rounded-lg">
+                        No items to checkout
+                    </a>
+                {% endif %}
             {% endif %}
-                Checkout
-            </a>
         </div>
     </div>
 </div>

@@ -21,6 +21,7 @@ class AddressView(LoginRequiredMixin, generic.TemplateView):
 
 
 class DeleteAddress(generic.View):
+
     def get(self, request, *args, **kwargs):
         address = get_object_or_404(Address, id=kwargs['pk'])
         address.is_deleted = True
