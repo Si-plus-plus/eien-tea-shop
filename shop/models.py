@@ -128,7 +128,11 @@ class Transaction(models.Model):
     def get_items_summary(self) -> str:
         summary = ""
         for cart_items in self.cart.all():
-            item = f"{cart_items.item.name}, {cart_items.variation}"
+            name = cart_items.item.name
+            if len(cart_items.item.name) > 12:
+                name = name[:12]
+                name += "..."
+            item = f"{name}, {cart_items.variation}"
             summary += item + '\n'
         return summary
 
