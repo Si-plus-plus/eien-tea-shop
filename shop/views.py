@@ -186,12 +186,12 @@ class CheckoutView(generic.FormView):
             transaction.shipping_address = selected_shipping_address
         else:
             new_address = Address.objects.create(
-                user = self.request.user,
-                label_name = form.cleaned_data['label_name'],
-                shipping_address = form.cleaned_data['shipping_address'],
-                shipping_notes = form.cleaned_data['shipping_notes'],
-                city = form.cleaned_data['city'],
-                postal_code = form.cleaned_data['postal_code'],
+                user=self.request.user,
+                label_name=form.cleaned_data['label_name'],
+                shipping_address=form.cleaned_data['shipping_address'],
+                shipping_notes=form.cleaned_data['shipping_notes'],
+                city=form.cleaned_data['city'],
+                postal_code=form.cleaned_data['postal_code'],
             )
             transaction.shipping_address = new_address
 
