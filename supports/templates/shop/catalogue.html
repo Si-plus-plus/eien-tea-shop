@@ -21,7 +21,6 @@ Shop
             </div>
             <hr class="my-6">
             <form method="GET" class="">
-                {% csrf_token %}
                 <div class="mb-6">
                     {{ filter.form.name__icontains | as_crispy_field }}
                     {{ filter.form.ordering | as_crispy_field }}
