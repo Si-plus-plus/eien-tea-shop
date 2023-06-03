@@ -3,6 +3,10 @@
 {% load crispy_forms_tags %}
 {% load tailwind_filters %}
 
+{% block head_title %}
+{{ item.name }}
+{% endblock %}
+
 {% block content_title %}
 Shop
 {% endblock content_title %}
