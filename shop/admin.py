@@ -11,7 +11,8 @@ class ItemAdmin(admin.ModelAdmin):
         'price',
         'discounted_price',
         'stock',
-        'sold_count'
+        'sold_count',
+        'created_at'
     ]
 
 

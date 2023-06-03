@@ -78,7 +78,7 @@ class Item(models.Model):
         return self.active
 
     def is_newly_added(self):
-        return timezone.now() < self.created_at + timedelta(days=7)
+        return timezone.now() < self.created_at + timedelta(days=1)
 
     #TODO implement functions to get formatted price/discounted price
 

@@ -4,7 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
-from .models import Item, Cart, Address, Transaction, Payment
+
+from .filters import SearchFilter
+from .models import Item, Cart, Address, Transaction, Payment, Category, Type
 from .utils import get_or_set_session
 from .forms import AddToCartForm, AddressForm, PaymentForm
 from django.utils import timezone
@@ -14,13 +16,27 @@ from itertools import chain
 
 class CatalogueView(generic.ListView):
     template_name = 'shop/catalogue.html'
-    queryset = Item.objects.filter(active=True).order_by('-stock')
+    queryset = Item.objects.filter(active=True)
 
     def get_context_data(self, **kwargs):
         # TODO return items in stock, then items not in stock
         context = super(CatalogueView, self).get_context_data(**kwargs)
-        context['item_list'] = self.queryset
+        context['filter'] = SearchFilter(
+            self.request.GET,
+            queryset=self.queryset
+        )
         return context
+
+
+class SubtractQuantityView(generic.View):
+    def get(self, request, *args, **kwargs):
+        cart_item = get_object_or_404(Cart, id=kwargs['pk'])
+        if cart_item.quantity <= 1:
+            cart_item.delete()
+        else:
+            cart_item.quantity -= 1
+            cart_item.save()
+        return redirect('shop:cart')
 
 
 class ItemDetailView(generic.FormView):
@@ -106,7 +122,7 @@ class PaymentView(generic.FormView):
     form_class = PaymentForm
 
     def get_success_url(self):
-        return reverse('shop:transactions-list') #TODO transaction history
+        return reverse('shop:transactions-list')
 
     def get_form_kwargs(self):
         kwargs = super(PaymentView, self).get_form_kwargs()
@@ -144,6 +160,7 @@ class CheckoutView(generic.FormView):
         return kwargs
 
     def gen_invoice_no(self, transaction):
+        # TODO proper invoicing
         prefix = transaction.created_at.strftime("%Y%m%d")
         prefix += '/'
         for i in range(3):
