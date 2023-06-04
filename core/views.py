@@ -20,7 +20,7 @@ class AddressView(LoginRequiredMixin, generic.TemplateView):
         return context
 
 
-class DeleteAddress(generic.View):
+class DeleteAddress(LoginRequiredMixin, generic.View):
 
     def get(self, request, *args, **kwargs):
         address = get_object_or_404(Address, id=kwargs['pk'])
