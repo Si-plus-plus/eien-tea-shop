@@ -170,4 +170,3 @@ class Cart(models.Model):
 
     def get_total_item_discounted_price(self):
         return self.quantity * self.item.discounted_price
-
