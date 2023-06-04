@@ -1,4 +1,5 @@
 import hashlib
+import os
 
 from django.db import models
 from django.utils.text import slugify
@@ -56,8 +57,8 @@ class Item(models.Model):
 
     stock = models.IntegerField(default=0)
     sold_count = models.IntegerField(default=0)
-
     image = models.ImageField(upload_to='item_images', default='none/none.jpg', null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -94,6 +95,14 @@ class Item(models.Model):
 
     def get_discount_percentage(self) -> str:
         return f"-{ceil(self.get_discount_value()/self.price * 100)}%"
+
+
+class AdditionalItemImage(models.Model):
+    item = models.ForeignKey(Item, null=True, on_delete=models.SET_NULL)
+    image = models.ImageField(upload_to='item_images', default='none/none.jpg', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.item.name} [filename: {os.path.basename(self.image.name)}]"
 
 
 class PaymentMethod(models.Model):

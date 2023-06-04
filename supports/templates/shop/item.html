@@ -13,7 +13,7 @@ Shop
 
 {% block content %}
     <div class="flex flex-wrap justify-between">
-        <div class="relative m-4 h-96">
+        <div class="relative m-4">
             <img class="w-96 h-96 rounded-lg object-cover border border-gray-100" src="{{ item.image.url }}">
             {% if item.is_newly_added %}
                 <div class="absolute top-1 right-1 2">
@@ -29,6 +29,12 @@ Shop
                     </span>
                 </div>
             {% endif %}
+            <div class="w-96 grid grid-cols-4 gap-4 mt-4">
+<!--                #TODO change focused image on click-->
+                {% for alt_image in alt_images %}
+                    <img class="w-20 h-20 rounded-lg object-cover border border-gray-100" src="{{ alt_image.image.url }}">
+                {% endfor %}
+            </div>
         </div>
         <div class="w-7/12 my-4 bg-white p-8 rounded-lg relative">
             <div class="w-full">

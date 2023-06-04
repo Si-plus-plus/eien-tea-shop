@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Category, Type, Transaction, Cart, Address, Variation, PaymentMethod, Payment
+from .models import Item, Category, Type, Transaction, Cart, Variation, PaymentMethod, Payment, AdditionalItemImage
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -42,6 +42,7 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Item, ItemAdmin)
+admin.site.register(AdditionalItemImage)
 admin.site.register(Variation)
 admin.site.register(Type)
 admin.site.register(Category)

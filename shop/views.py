@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 
 from .filters import SearchFilter
-from .models import Item, Cart, Address, Transaction, Payment, Category, Type
+from .models import Item, Cart, Address, Transaction, Payment, Category, Type, AdditionalItemImage
 from .utils import get_or_set_session
 from .forms import AddToCartForm, AddressForm, PaymentForm
 from django.utils import timezone
@@ -67,6 +67,7 @@ class ItemDetailView(generic.FormView):
     def get_context_data(self, **kwargs):
         context = super(ItemDetailView, self).get_context_data(**kwargs)
         context['item'] = self.get_object()
+        context['alt_images'] = AdditionalItemImage.objects.filter(item=self.get_object())
         return context
 
 
