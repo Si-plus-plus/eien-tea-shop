@@ -25,15 +25,32 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application definition
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django.contrib.auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'django_filters',
+    'paypal.standard.ipn',
+
+    'crispy_forms',
+    "crispy_tailwind",
+
     'core',
+    'shop',
 ]
 
 MIDDLEWARE = [
@@ -64,7 +81,22 @@ TEMPLATES = [
     },
 ]
 
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_LOGOUT_ON_GET = True
+LOGIN_REDIRECT_URL = '/'
+
+SITE_ID = 1
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+CRISPY_TEMPLATE_PACK = "tailwind"
+
 WSGI_APPLICATION = 'tea_shop.wsgi.application'
+
+USE_THOUSAND_SEPARATOR = True
 
 
 # Database
@@ -102,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
@@ -117,6 +149,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "supports/static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "supports/static_root")
 MEDIA_URL = 'supports/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "supports/media")
+
+PAYPAL_CLIENT_ID = env('PAYPAL_SANDBOX_CLIENT_ID')
+PAYPAL_SECRET_KEY = env('PAYPAL_SANDBOX_SECRET_KEY')
+PAYPAL_TEST = True
+PAYPAL_RECEIVER_EMAIL = env('PAYPAL_SANDBOX_MERCHANT_EMAIL')
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -146,3 +184,8 @@ if DEBUG is False:
             "PORT": ''
         }
     }
+
+    PAYPAL_CLIENT_ID = env('PAYPAL_LIVE_CLIENT_ID')
+    PAYPAL_SECRET_KEY = env('PAYPAL_LIVE_SECRET_KEY')
+    PAYPAL_TEST = False
+    PAYPAL_RECEIVER_EMAIL = env('PAYPAL_LIVE_MERCHANT_EMAIL')

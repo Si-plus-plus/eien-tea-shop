@@ -1,0 +1,126 @@
+{% extends "components/content_template.html" %}
+
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
+
+{% block head_title %}
+{{ item.name }}
+{% endblock %}
+
+{% block content_title %}
+Shop
+{% endblock content_title %}
+
+{% block content %}
+    <div class="flex flex-wrap justify-between">
+        <div class="relative m-4 ml-0">
+            <img class="w-96 h-96 rounded-lg object-cover border border-gray-100" src="{{ item.image.url }}">
+            {% if item.is_newly_added %}
+                <div class="absolute top-1 right-1 2">
+                    <span class="inline-block bg-blue-400 text-white rounded-full px-3 text-sm font-bold">
+                        NEW
+                    </span>
+                </div>
+            {% endif %}
+            {% if not item.active %}
+                <div class="absolute top-1/3 left-1/2 -translate-x-1/2 translate-y-1/2">
+                    <span class="inline-block bg-gray-500/75 text-white text-sm rounded-full p-2 text-lg font-bold mr-2">
+                        ITEM NOT AVAILABLE
+                    </span>
+                </div>
+            {% elif not item.in_stock %}
+                <div class="absolute top-1/3 left-1/2 -translate-x-1/2 translate-y-1/2">
+                    <span class="inline-block bg-gray-500/75 text-white text-base rounded-full p-2 text-lg font-bold mr-2">
+                        SOLD OUT
+                    </span>
+                </div>
+            {% endif %}
+
+            {% if alt_images.count > 0 %}
+                <div class="w-96 grid grid-cols-4 gap-4 mt-4">
+    <!--                #TODO change focused image on click-->
+                    <img class="w-20 h-20 rounded-lg object-cover border border-gray-100" src="{{ item.image.url }}">
+                    {% for alt_image in alt_images %}
+                        <img class="w-20 h-20 rounded-lg object-cover border border-gray-100" src="{{ alt_image.image.url }}">
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="w-7/12 my-4 bg-white p-8 rounded-lg relative border border-gray-200">
+            <div class="w-full">
+                <div class="text-2xl font-bold line-clamp-3">
+                    {{ item.name }}
+                </div>
+            </div>
+
+            <div class="text-gray-400 mb-6">
+                <span class="text-sm">Items Sold : #TODO</span>
+            </div>
+            <div class="text-2xl font-semibold mb-6">
+                {% if item.is_discounted %}
+                    <span>Rp{{ item.discounted_price }}</span>
+                    <span class="line-through text-gray-300 text-base font-normal">Rp{{ item.price }}</span>
+                    <span class="inline-block bg-red-400 text-white rounded-full px-3 text-sm font-bold mr-2">
+                        {{ item.get_discount_percentage }}
+                    </span>
+                {% else %}
+                    <span>Rp{{ item.price }}</span>
+                {% endif %}
+            </div>
+            <div class="">
+                <form method="POST" class="">
+                    {% csrf_token %}
+                    <div class="flex flex-wrap inline-block align-bottom h-fit">
+                        <div class="pr-4 w-1/2">
+                            {{ form.variation | as_crispy_field }}
+                        </div>
+                        <div class="pr-4 w-1/4">
+                            {{ form.quantity | as_crispy_field }}
+                        </div>
+                        <div class="pt-7 w-1/4">
+<!--                            #TODO subscribe email for restock notification-->
+                            {% if item.in_stock and item.active %}
+                                <button type='submit' class="px-2 py-2 cursor-pointer bg-transparent hover:bg-green-600 text-green-600 font-semibold hover:text-white border border-green-600 hover:border-transparent rounded-lg">
+                            {% else %}
+                                <button class="px-2 py-2 bg-gray-300 text-white font-semibold rounded-lg" disabled>
+                            {% endif %}
+                                Add to cart
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="my-2">
+                <div class="relative flex pt-5 my-2 items-center">
+                    <span class="text-lg font-semibold text-green-600">
+                        Specifications
+                    </span>
+                    <hr class=" ml-4 flex-grow border-t"></hr>
+                </div>
+                <table class="table-auto ml-4">
+                    <tr>
+                        <td class="w-1/2 font-semibold">Type</td>
+                        <td>: {{ item.type }}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-semibold">Category</td>
+                        <td>: {{ item.category }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="my-2">
+                <div class="relative flex pt-5 my-2 items-center">
+                    <span class="text-lg font-semibold text-green-600">
+                        Description
+                    </span>
+                    <hr class=" ml-4 flex-grow border-t"></hr>
+                </div>
+                <div class="ml-4 text-justify">
+                    <p>{{ item.description | linebreaks }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

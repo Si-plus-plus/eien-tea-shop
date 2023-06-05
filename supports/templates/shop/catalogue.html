@@ -1,0 +1,95 @@
+{% extends "components/content_template.html" %}
+
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
+
+{% block head_title %}
+Shop
+{% endblock %}
+
+{% block content_title %}
+Shop
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="max-w-screen-lg mx-auto flex flex-wrap mb-6">
+    <div class="w-1/4 pt-4 pr-4">
+        <div class="bg-white p-8 rounded-lg border border-gray-200">
+            <div class="text-2xl font-semibold">
+                Filters
+            </div>
+            <hr class="my-6">
+            <form method="GET" class="">
+                <div class="mb-6">
+                    {{ filter.form.name__icontains | as_crispy_field }}
+                    {{ filter.form.ordering | as_crispy_field }}
+                    {{ filter.form.category | as_crispy_field }}
+                    {{ filter.form.type | as_crispy_field }}
+                    {{ filter.form.availability | as_crispy_field }}
+                </div>
+                <button type="submit" class="block w-full px-4 py-2 mb-4 border font-bold border-green-600 bg-green-600 text-white rounded-lg text-center hover:bg-transparent hover:text-green-600">
+                    Filter
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="w-3/4 grid grid-cols-3 gap-4 content-start">
+        {% for item in filter.qs %}
+            <a href="{{ item.get_absolute_url }}" class="h-fit w-60 rounded-lg overflow-hidden bg-white border border-gray-200 my-4 mx-2 hover:scale-105 ease-in duration-100 text-black hover:text-green-600">
+                <div class="relative">
+                    <img class="w-full h-48 object-cover" src="{{ item.image.url }}">
+
+                    {% if item.is_newly_added %}
+                        <div class="absolute top-2 left-1 pl-2">
+                            <span class="inline-block bg-blue-400 text-white rounded-full px-3 text-sm font-bold">
+                                NEW
+                            </span>
+                        </div>
+                    {% endif %}
+
+                    {% if item.is_discounted %}
+                        <div class="absolute top-2 right-1 pr-2">
+                            <span class="inline-block bg-red-400 text-white rounded-full px-3 text-sm font-bold">
+                                {{ item.get_discount_percentage }}
+                            </span>
+                        </div>
+                    {% endif %}
+
+                    {% if not item.in_stock %}
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                            <span class="inline-block bg-gray-500/75 text-white rounded-full p-2 text-sm font-bold mr-2">
+                                SOLD OUT
+                            </span>
+                        </div>
+                    {% endif %}
+
+                </div>
+                <div class="px-6 pt-3 pb-2">
+                    <div class="font-bold text-xl truncate text-inherit">
+                        {{ item.name }}
+                    </div>
+                    <div class="font-semibold truncate text-black">
+                        {% if item.is_discounted %}
+                            <span>Rp{{ item.discounted_price }}</span>
+                            <span class="line-through text-gray-300 font-normal">Rp{{ item.price }}</span>
+                        {% else %}
+                            <span>Rp{{ item.price }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="px-6 pt-2 pb-2 text-xs font-semibold text-gray-700 ">
+                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2 my-1">
+                        {{ item.category }}
+                    </span>
+                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 my-1">
+                        {{ item.type }}
+                    </span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}
