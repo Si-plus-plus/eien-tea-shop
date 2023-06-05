@@ -148,13 +148,13 @@ class Transaction(models.Model):
 
     def get_total_price(self):
         total = 0
-        for cart_items in self.cart.all():
+        for cart_items in self.cart.all().filter(item__active=True):
             total += cart_items.get_total_item_price()
         return total
 
     def get_total_discounted_price(self):
         total = 0
-        for cart_items in self.cart.all():
+        for cart_items in self.cart.all().filter(item__active=True):
             if cart_items.item.is_discounted():
                 total += cart_items.get_total_item_discounted_price()
             else:

@@ -86,7 +86,9 @@ class CartView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(CartView, self).get_context_data(**kwargs)
-        context['transaction'] = get_or_set_session(self.request)
+        transaction = get_or_set_session(self.request)
+        context['transaction'] = transaction
+        context['cart'] = Cart.objects.filter(transaction=transaction, item__active=True)
         return context
 
 
@@ -173,7 +175,9 @@ class CheckoutView(LoginRequiredMixin, generic.FormView):
 
     def get_context_data(self, **kwargs):
         context = super(CheckoutView, self).get_context_data(**kwargs)
-        context['transaction'] = get_or_set_session(self.request)
+        transaction = get_or_set_session(self.request)
+        context['transaction'] = transaction
+        context['cart'] = Cart.objects.filter(transaction=transaction, item__active=True)
         return context
 
 

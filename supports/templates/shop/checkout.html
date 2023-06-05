@@ -28,7 +28,7 @@ Checkout
             <hr class="mb-4">
             <table class="table-auto w-full">
                 <thead>
-                    {% if transaction.cart.count > 0 %}
+                    {% if cart.count > 0 %}
                         <tr>
                             <th class="w-6/12 py-4">
                                 Name
@@ -43,7 +43,7 @@ Checkout
                     {% endif %}
                 </thead>
                 <tbody class="mt-6">
-                    {% for item in transaction.cart.all %}
+                    {% for item in cart.all %}
                         <tr class="align-top">
                             <td class="">
                                 <div class="h-20 px-4 inline-block items-middle align-middle">
