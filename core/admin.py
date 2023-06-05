@@ -8,12 +8,12 @@ from core.models import Address
 class AddressAdmin(admin.ModelAdmin):
     list_display = [
         'label_name',
+        'is_deleted',
         'shipping_address',
         'shipping_notes',
         'city',
         'country',
         'postal_code',
-        'is_deleted',
     ]
 
 admin.site.register(Address, AddressAdmin)

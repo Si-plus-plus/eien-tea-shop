@@ -1,10 +1,18 @@
 from django.contrib import admin
 from .models import Item, Category, Type, Transaction, Cart, Variation, PaymentMethod, Payment, AdditionalItemImage
 
+@admin.action(description="Set selected items as inactive")
+def item_set_inactive(modeladmin, request, queryset):
+    queryset.update(active=False)
+
+@admin.action(description="Set selected items as active")
+def item_set_active(modeladmin, request, queryset):
+    queryset.update(active=True)
 
 class ItemAdmin(admin.ModelAdmin):
     list_display = [
         'name',
+        'active',
         'slug',
         'category',
         'type',
@@ -13,6 +21,10 @@ class ItemAdmin(admin.ModelAdmin):
         'stock',
         'sold_count',
         'created_at'
+    ]
+    actions = [
+        item_set_inactive,
+        item_set_active
     ]
 
 
