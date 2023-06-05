@@ -22,13 +22,20 @@ Shop
                     </span>
                 </div>
             {% endif %}
-            {% if not item.in_stock %}
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <span class="inline-block bg-gray-500/75 text-white rounded-full p-2 text-lg font-bold mr-2">
+            {% if not item.active %}
+                <div class="absolute top-1/3 left-1/2 -translate-x-1/2 translate-y-1/2">
+                    <span class="inline-block bg-gray-500/75 text-white text-sm rounded-full p-2 text-lg font-bold mr-2">
+                        ITEM NOT AVAILABLE
+                    </span>
+                </div>
+            {% elif not item.in_stock %}
+                <div class="absolute top-1/3 left-1/2 -translate-x-1/2 translate-y-1/2">
+                    <span class="inline-block bg-gray-500/75 text-white text-base rounded-full p-2 text-lg font-bold mr-2">
                         SOLD OUT
                     </span>
                 </div>
             {% endif %}
+
             {% if alt_images.count > 0 %}
                 <div class="w-96 grid grid-cols-4 gap-4 mt-4">
     <!--                #TODO change focused image on click-->
