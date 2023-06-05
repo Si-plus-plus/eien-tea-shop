@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}
+Home
+{% endblock %}
+
+{% block container %}
+
+<section class="relative bg-[url({% static 'images/banner.jpg' %})] bg-cover bg-center bg-no-repeat" >
+    <div class="backdrop-brightness-50">
+        <div class="max-w-xl mx-auto text-center text-white py-32 ">
+            <h1 class="text-5xl">
+                Explore Japanese tea.
+            </h1>
+            <p class="mt-4">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt illo
+                tenetur fuga ducimus numquam ea!
+            </p>
+        </div>
+    </div>
+</section>
+
+{% endblock container %}
+

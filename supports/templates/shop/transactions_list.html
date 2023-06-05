@@ -1,0 +1,64 @@
+{% extends "components/content_template.html" %}
+
+{% load static %}
+
+{% block head_title %}
+Your Transactions
+{% endblock %}
+
+{% block content_title %}
+Your Transactions
+{% endblock content_title %}
+
+{% block content %}
+    <div class="flex flex-wrap my-6 bg-white p-8 rounded-lg h-fit border border-gray-200">
+        {% if transactions.count > 0 %}
+            <table class="w-full table-fixed">
+                <thead>
+                    <tr>
+                        <th class="w-2/12">
+                            Invoice No
+                        </th>
+                        <th class="w-3/12">
+                            Orders
+                        </th>
+                        <th class="w-2/12">
+                            Total
+                        </th>
+                        <th class="w-2/12">
+                            Payment
+                        </th>
+                        <th class="w-3/12">
+                            Shipping Address
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    {% for transaction in transactions %}
+                        <tr class="py-2 odd:bg-white even:bg-gray-100/50">
+                            <td>
+                                {{ transaction.invoice_no }}
+                            </td>
+                            <td>
+                                {{ transaction.get_items_summary | linebreaks }}
+                            </td>
+                            <td>
+                                Rp{{ transaction.payment.amount }}
+                            </td>
+                            <td>
+                                {{ transaction.payment.payment_method }}
+                            </td>
+                            <td class="text-clip overflow-hidden">
+                                {{ transaction.shipping_address | linebreaks }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="text-center text-gray-400">
+                You have not made any transactions
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

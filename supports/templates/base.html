@@ -3,7 +3,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Eien Tea Online Store {% block head_title %}{% endblock %}</title>
+    <title>{% block head_title %}{% endblock %} | Eien Tea Online Store</title>
+    {% block extra_head %}
+    {% endblock %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon-32x32.png' %}">
@@ -19,10 +21,11 @@
     {% include 'header.html' %}
     {% include 'navbar.html' %}
 
-    <div>
-        {% block content %}
-        {% endblock content %}
+    <div class="min-h-screen">
+        {% block container %}W
+        {% endblock container %}
     </div>
+
 
     {% include 'footer.html' %}
 
