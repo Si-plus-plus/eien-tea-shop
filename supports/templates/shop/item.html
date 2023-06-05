@@ -79,7 +79,7 @@ Shop
                         </div>
                         <div class="pt-7 w-1/4">
 <!--                            #TODO subscribe email for restock notification-->
-                            {% if item.in_stock %}
+                            {% if item.in_stock and item.active %}
                                 <button type='submit' class="px-2 py-2 cursor-pointer bg-transparent hover:bg-green-600 text-green-600 font-semibold hover:text-white border border-green-600 hover:border-transparent rounded-lg">
                             {% else %}
                                 <button class="px-2 py-2 bg-gray-300 text-white font-semibold rounded-lg" disabled>
