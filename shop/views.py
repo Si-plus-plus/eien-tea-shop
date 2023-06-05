@@ -16,6 +16,7 @@ from .utils import get_or_set_session
 def finalize_payment(transaction, payment_method):
     payment = Payment()
     payment.payment_method = payment_method
+    payment.amount = transaction.get_total_discounted_price()
     payment.save()
 
     transaction.payment = payment

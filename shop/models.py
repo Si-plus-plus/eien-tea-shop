@@ -114,6 +114,7 @@ class PaymentMethod(models.Model):
 
 class Payment(models.Model):
     payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
+    amount = models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
