@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = 'shop'
@@ -14,6 +14,8 @@ urlpatterns = [
 
     path('checkout/', views.CheckoutView.as_view(), name='cart-checkout'),
     path('payment/', views.PaymentView.as_view(), name='payment'),
+
+    path('confirm-order/', views.capture_transaction_view, name='capture-transaction'),
 
     path('transactions/', views.TransactionsListView.as_view(), name='transactions-list'),
 ]

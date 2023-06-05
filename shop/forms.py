@@ -1,11 +1,7 @@
 from django import forms
-from .models import Cart, Variation, Item, Address, Payment, Transaction, PaymentMethod
-
 from django.contrib.auth import get_user_model
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Field, Row, Submit, Button, Column, MultiField, Fieldset, Submit
-
+from .models import Cart, Variation, Item, Address, PaymentMethod
 
 User = get_user_model()
 
@@ -74,7 +70,7 @@ class PaymentForm(forms.Form):
         user_id = kwargs.pop('user_id')
 
         super().__init__(*args, **kwargs)
-        payment_method_queryset = PaymentMethod.objects.all()
+        payment_method_queryset = PaymentMethod.objects.all().exclude(id=4)
         self.fields['payment_method'].queryset = payment_method_queryset
 
         self.user_id = user_id

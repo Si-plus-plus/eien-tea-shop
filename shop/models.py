@@ -141,7 +141,7 @@ class Transaction(models.Model):
             if len(cart_items.item.name) > 12:
                 name = name[:12]
                 name += "..."
-            item = f"{name}, {cart_items.variation}"
+            item = f"{name}, {cart_items.quantity} pc(s), {cart_items.variation}"
             summary += item + '\n'
         return summary
 

@@ -1,17 +1,26 @@
 from random import randint
 
-from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, reverse, redirect
 from django.views import generic
 
+from tea_shop import settings
 from .filters import SearchFilter
-from .models import Item, Cart, Address, Transaction, Payment, Category, Type, AdditionalItemImage
-from .utils import get_or_set_session
 from .forms import AddToCartForm, AddressForm, PaymentForm
-from django.utils import timezone
+from .models import Item, Cart, Address, Transaction, Payment, AdditionalItemImage, PaymentMethod
+from .utils import get_or_set_session
 
-from itertools import chain
+
+def finalize_payment(transaction, payment_method):
+    payment = Payment()
+    payment.payment_method = payment_method
+    payment.save()
+
+    transaction.payment = payment
+    transaction.finished = True
+    transaction.save()
 
 
 class CatalogueView(generic.ListView):
@@ -106,37 +115,6 @@ class RemoveFromCartView(generic.View):
         return redirect('shop:cart')
 
 
-class PaymentView(LoginRequiredMixin, generic.FormView):
-    #TODO integrate paypal
-    template_name = 'shop/payment.html'
-    form_class = PaymentForm
-
-    def get_success_url(self):
-        return reverse('shop:transactions-list')
-
-    def get_form_kwargs(self):
-        kwargs = super(PaymentView, self).get_form_kwargs()
-        kwargs["user_id"] = self.request.user.id
-        return kwargs
-
-    def form_valid(self, form):
-        payment = Payment()
-        payment.payment_method = form.cleaned_data['payment_method']
-        payment.save()
-
-        transaction = get_or_set_session(self.request)
-        transaction.payment = payment
-        transaction.finished = True
-        transaction.save()
-
-        return super(PaymentView, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(PaymentView, self).get_context_data(**kwargs)
-        context['transaction'] = get_or_set_session(self.request)
-        return context
-
-
 class CheckoutView(LoginRequiredMixin, generic.FormView):
     template_name = 'shop/checkout.html'
     form_class = AddressForm
@@ -205,3 +183,42 @@ class TransactionsListView(LoginRequiredMixin, generic.TemplateView):
         context = super(TransactionsListView, self).get_context_data(**kwargs)
         context['transactions'] = Transaction.objects.filter(user=self.request.user, finished=True).order_by('-created_at')
         return context
+
+
+class PaymentView(LoginRequiredMixin, generic.FormView):
+    template_name = 'shop/payment.html'
+    form_class = PaymentForm
+
+    def get_success_url(self):
+        return reverse('shop:transactions-list')
+
+    def get_form_kwargs(self):
+        kwargs = super(PaymentView, self).get_form_kwargs()
+        kwargs["user_id"] = self.request.user.id
+        return kwargs
+
+    def form_valid(self, form):
+        transaction = get_or_set_session(self.request)
+        payment_method = form.cleaned_data['payment_method']
+        finalize_payment(transaction, payment_method)
+
+        return super(PaymentView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(PaymentView, self).get_context_data(**kwargs)
+        transaction = get_or_set_session(self.request)
+        context['order'] = transaction
+        context["PAYPAL_CLIENT_ID"] = settings.PAYPAL_CLIENT_ID
+        context['IDR_amount'] = transaction.get_total_discounted_price()
+        context['USD_amount'] = round(transaction.get_total_discounted_price() / 15000, 2) #TODO convert properly
+        context['CALLBACK_URL'] = self.request.build_absolute_uri(reverse("shop:transactions-list"))
+        return context
+
+
+def capture_transaction_view(request, *args, **kwargs):
+    transaction = get_or_set_session(request)
+    payment_method = PaymentMethod.objects.get(id=4)
+    finalize_payment(transaction, payment_method)
+
+    return JsonResponse({"data": "Success"})
+
