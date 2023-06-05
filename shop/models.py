@@ -57,7 +57,7 @@ class Item(models.Model):
 
     stock = models.IntegerField(default=0)
     sold_count = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='item_images', default='none/none.jpg', null=True, blank=True)
+    image = models.ImageField(upload_to='item_images', default='none/no_image_available.png', null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
