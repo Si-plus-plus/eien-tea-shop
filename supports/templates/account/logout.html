@@ -1,19 +1,30 @@
 {% extends "account/base.html" %}
 
-{% load i18n %}
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
 
-{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}
+Log out
+{% endblock %}
+
+{% block content_title %}
+Log out
+{% endblock content_title %}
+
 
 {% block content %}
-<h1>{% trans "Sign Out" %}</h1>
+<div class="w-1/2 mx-auto bg-white p-8 rounded-lg h-fit border border-gray-200">
 
-<p>{% trans 'Are you sure you want to sign out?' %}</p>
+  <p>{% trans 'Are you sure you want to log out?' %}</p>
 
-<form method="post" action="{% url 'account_logout' %}">
-  {% csrf_token %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ request.GET.next }}"/>
-  <button type="submit">{% trans 'Sign Out' %}</button>
-</form>
+  <form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ request.GET.next }}"/>
+    <button type="submit">{% trans 'Log Out' %}</button>
+  </form>
 
-
+</div>
 {% endblock %}
