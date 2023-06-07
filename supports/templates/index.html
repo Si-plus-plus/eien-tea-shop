@@ -14,12 +14,71 @@ Home
                 Explore Japanese tea.
             </h1>
             <p class="mt-4">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt illo
-                tenetur fuga ducimus numquam ea!
+                Freshly harvested and hand-crafted for perfection.
             </p>
         </div>
     </div>
 </section>
+
+<div class="max-w-screen-lg mx-auto py-8">
+    <div class="my-6 bg-white p-8 rounded-lg h-fit border border-gray-200">
+        <div class="text-2xl font-bold mb-4">
+            New arrivals
+        </div>
+        <div class="grid grid-cols-4 gap-3 content-start">
+            {% for item in queryset %}
+                <a href="{{ item.get_absolute_url }}" class="h-fit w-50 rounded-lg overflow-hidden bg-white border border-gray-200 my-4 mx-2 hover:scale-105 ease-in duration-100 text-black hover:text-green-600">
+                    <div class="relative">
+                        <img class="w-full h-40 object-cover" src="{{ item.image.url }}">
+
+                        {% if item.is_newly_added %}
+                            <div class="absolute top-2 left-1 pl-2">
+                                <span class="inline-block bg-blue-400 text-white rounded-full px-3 text-sm font-bold">
+                                    NEW
+                                </span>
+                            </div>
+                        {% endif %}
+
+                        {% if item.is_discounted %}
+                            <div class="absolute top-2 right-1 pr-2">
+                                <span class="inline-block bg-red-400 text-white rounded-full px-3 text-sm font-bold">
+                                    {{ item.get_discount_percentage }}
+                                </span>
+                            </div>
+                        {% endif %}
+
+                        {% if not item.in_stock %}
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <span class="inline-block bg-gray-500/75 text-white rounded-full p-2 text-sm font-bold mr-2">
+                                    SOLD OUT
+                                </span>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="px-6 pt-3 pb-2">
+                        <div class="font-bold text-xl truncate text-inherit">
+                            {{ item.name }}
+                        </div>
+                        <div class="font-semibold truncate text-black">
+                            {% if item.is_discounted %}
+                                <span>Rp{{ item.discounted_price }}</span>
+                                <span class="line-through text-gray-300 font-normal">Rp{{ item.price }}</span>
+                            {% else %}
+                                <span>Rp{{ item.price }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+         <div class="w-full text-center pt-4 pb-4">
+            <a href="{% url 'shop:catalogue' %}" class="px-4 py-2 border text-green-600 border-green-600 font-semibold hover:bg-green-600 hover:text-white rounded-lg">
+                See more
+            </a>
+        </div>
+    </div>
+</div>
 
 {% endblock container %}
 
