@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import generic
 
+from shop.models import Item
 from tea_shop import settings
 from .forms import ContactForm
 from .models import Address
@@ -11,6 +12,12 @@ from .models import Address
 
 class HomeView(generic.TemplateView):
     template_name = 'index.html'
+    queryset = Item.objects.filter(active=True).order_by('-created_at')[:4]
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        context['queryset'] = self.queryset
+        return context
 
 
 class ContactView(generic.FormView):
