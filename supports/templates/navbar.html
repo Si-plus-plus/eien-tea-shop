@@ -1,5 +1,5 @@
 <hr>
-<nav class="max-w-screen-sm mx-auto py-4">
+<nav class="max-w-sm mx-auto py-4">
     <ul class="flex flex-wrap items-center justify-between">
         <li>
             <a href="/">
@@ -12,18 +12,10 @@
             </a>
         </li>
         <li>
-            <a href="/">
-                Blog
-            </a>
-        </li>
-        <li>
             <a href="{% url 'core:contact' %}">
                 Contact
             </a>
         </li>
-        {% if request.user.is_staff %}
-            <li><a href="/">Staff</a></li>
-        {% endif %}
     </ul>
 </nav>
 <hr>
