@@ -1,0 +1,18 @@
+{% extends "components/content_template.html" %}
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
+{% load static %}
+
+{% block head_title %}
+Contact
+{% endblock %}
+
+{% block content_title %}
+Contact
+{% endblock content_title %}
+
+{% block content %}
+    <div class="w-1/2 mx-auto bg-white p-8 rounded-lg h-fit border border-gray-200">
+        <p>We have received your message. We will reach out to you shortly.</p>
+    </div>
+{% endblock content %}

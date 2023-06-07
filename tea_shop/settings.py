@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'shop',
 ]
 
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+NOTIFY_EMAIL = env('NOTIFY_EMAIL')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
