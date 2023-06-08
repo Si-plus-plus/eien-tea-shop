@@ -35,9 +35,9 @@ class SearchFilter(django_filters.FilterSet):
 
     def filter_by_order(self, queryset, name, value):
         if value == 'ascending':
-            expression = 'created_at'
-        else:
             expression = '-created_at'
+        else:
+            expression = 'created_at'
         return queryset.order_by(expression)
 
     def filter_by_availability(self, queryset, name, value):
